@@ -30,6 +30,7 @@ contract CrowdsaleFabric is Pausable{
     **/
     function createCrowdsale(uint256 _start, uint256 _end, uint256 _rate, uint256 _goal, uint256 _cap, address _wallet, address _token)
     public whenNotPaused returns (BasicCrowdsale) {
+        CrowdsaleWasCreated(_wallet, _token);
         return new BasicCrowdsale(_start, _end, _rate, _goal, _cap, _wallet, _token);
     }
 }
