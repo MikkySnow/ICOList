@@ -2,7 +2,7 @@ pragma solidity ^0.4.18;
 
 /**
 *   Contract for storage of crowdsales. Using storage we divide business logic and storage.
-*   In case of any bugs or vulnerables we can redeploy our contract for logic and keep data safe
+*   In case of any bugs or exploits we can redeploy our contract for logic and keep data safe
 *   Storage implement only create and retrieve functions
 **/
 contract CrowdsaleStorage {
@@ -15,6 +15,10 @@ contract CrowdsaleStorage {
 
     /*** STORAGE ***/
 
+    // Mapping for all crowdsales. One address can create multiple crowdsales,
+    // so we should use uint256 index
+    mapping (uint256 => CrowdsaleInfo) crowdsales;
+
     /*** EVENTS ***/
 
     // Emits when crowdsale was added to storage
@@ -23,7 +27,8 @@ contract CrowdsaleStorage {
     /*** FUNCTIONS ***/
 
     /**
-    *   Adds crowdsale info to storage
+    *   Adds crowdsale info to storage. Calls only by Crowdsale fabric contract
+    *   in createCrowdsale() function
     *   @param _crowdsaleAddress            address of crowdsale contract
     *   @param _tokenAddress                address of token contract
     **/
