@@ -4,7 +4,9 @@ import "zeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "./BasicCrowdsale.sol";
 
 /**
-*   Fabric for crowdsale. There're not common interface for crowdsale, so
+*   @title Fabric for crowdsales
+*   @dev Contract for generation crowdsale contracts
+*   There're not common interface for crowdsale, so
 *   we should use fabric to avoid it. Also by using fabric we can support interactive crowdsale
 **/
 
