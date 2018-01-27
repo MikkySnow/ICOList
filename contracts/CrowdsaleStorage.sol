@@ -37,6 +37,9 @@ contract CrowdsaleStorage {
     /// @dev Emits when admins set crowdsale status to active
     event CrowdsaleBecameActive(uint256 _crowdsaleId);
 
+    /// @dev Emits when crowdsale was ended
+    event CrowdsaleWasEnded(uint256 _crowdsaleId);
+
     /*** FUNCTIONS ***/
 
     /**
@@ -67,5 +70,15 @@ contract CrowdsaleStorage {
     function _setCrowdsaleActive(uint256 _crowdsaleId) internal {
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
         CrowdsaleBecameActive(_crowdsaleId);
+    }
+
+    /**
+    *   @dev Sets crowdsale status to ended
+    *   Uses internally in finalization function or can be called by admin contract
+    *   @param _crowdsaleId         id of chosen crowdsale
+    **/
+    function _setCrowdsaleEnded(uint256 _crowdsaleId) internal {
+        crowdsales[_crowdsaleId].status = CrowdsaleStatus.Ended;
+        CrowdsaleWasEnded(_crowdsaleEnded);
     }
 }
