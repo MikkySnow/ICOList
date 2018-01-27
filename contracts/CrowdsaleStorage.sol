@@ -34,6 +34,9 @@ contract CrowdsaleStorage {
     /// @dev Emits when crowdsale was added to storage
     event CrowdsaleWasAdded(address _crowdsaleAddress, address _tokenAddress);
 
+    /// @dev Emits when admins set crowdsale status to active
+    event CrowdsaleBecameActive(uint256 _crowdsaleId);
+
     /*** FUNCTIONS ***/
 
     /**
@@ -63,5 +66,6 @@ contract CrowdsaleStorage {
     **/
     function _setCrowdsaleActive(uint256 _crowdsaleId) internal {
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
+        CrowdsaleBecameActive(_crowdsaleId);
     }
 }
