@@ -55,4 +55,13 @@ contract CrowdsaleStorage {
 
         CrowdsaleWasAdded(_crowdsaleAddress, _tokenAddress);
     }
+
+    /**
+    *   @dev Sets crowdsale status to active
+    *   Uses internally by admin contract. Only admins can set it active
+    *   @param _crowdsaleId         id of chosen crowdsale
+    **/
+    function _setCrowdsaleActive(uint256 _crowdsaleId) internal {
+        crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
+    }
 }
