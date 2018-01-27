@@ -18,6 +18,7 @@ contract CrowdsaleStorage {
     struct CrowdsaleInfo {
         address crowdsaleAddress;
         address tokenAddress;
+        CrowdsaleStatus status;
     }
 
     /*** STORAGE ***/
