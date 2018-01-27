@@ -7,7 +7,6 @@ import "zeppelin-solidity/contracts/crowdsale/RefundableCrowdsale.sol";
 *   @title Base contract for all crowdsales
 *   @dev We use this contract as common interface for crowdsales
 **/
-
 contract BasicCrowdsale is CappedCrowdsale, RefundableCrowdsale {
 
     // Address of token contract
