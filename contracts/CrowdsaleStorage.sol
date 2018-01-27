@@ -1,7 +1,9 @@
 pragma solidity ^0.4.18;
 
 /**
-*   Contract for storage of crowdsales. Using storage we divide business logic and storage.
+*   @title Storage contract for crowdsales.
+*   @dev There stored data of all crowdsales
+*   Using storage we divide business logic and storage.
 *   In case of any bugs or exploits we can redeploy our contract for logic and keep data safe
 *   Storage implement only create and retrieve functions
 **/
