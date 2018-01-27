@@ -1,5 +1,7 @@
 pragma solidity ^0.4.18;
 
+import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
+
 /**
 *   @title Storage contract for crowdsales.
 *   @dev There stored data of all crowdsales
@@ -7,7 +9,7 @@ pragma solidity ^0.4.18;
 *   In case of any bugs or exploits we can redeploy our contract for logic and keep data safe
 *   Storage implement only create and retrieve functions
 **/
-contract CrowdsaleStorage {
+contract CrowdsaleStorage is HasNoEther {
 
     /// @dev Enum for crowdsale status
     enum CrowdsaleStatus {
