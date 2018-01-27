@@ -7,6 +7,13 @@ pragma solidity ^0.4.18;
 **/
 contract CrowdsaleStorage {
 
+    // Enum for crowdsale status
+    enum CrowdsaleStatus {
+        Waiting,        // For crowdsales, which waiting for acceptance from admins
+        Active,         // For crowdsales, which is active at moment. At moment can be only 1 active crowdsale
+        Ended           // For crowdsales, which is gone. They cannot be restarted
+    }
+
     // Basic struct for crowdsale info
     struct CrowdsaleInfo {
         address crowdsaleAddress;
