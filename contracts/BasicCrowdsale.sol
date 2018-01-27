@@ -4,7 +4,8 @@ import "zeppelin-solidity/contracts/crowdsale/CappedCrowdsale.sol";
 import "zeppelin-solidity/contracts/crowdsale/RefundableCrowdsale.sol";
 
 /**
-*   Interface for crowdsale
+*   @title Base contract for all crowdsales
+*   @dev We use this contract as common interface for crowdsales
 **/
 
 contract BasicCrowdsale is CappedCrowdsale, RefundableCrowdsale {
