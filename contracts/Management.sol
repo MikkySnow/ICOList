@@ -4,8 +4,7 @@ import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
 
 /**
 *   @title Contract that implements logic of management.
-*   @dev Implement logic of multisig, interaction with other contracts and
-*   role management
+*   @dev Implement logic of role management
 **/
 contract Management is HasNoEther {
 
@@ -35,8 +34,6 @@ contract Management is HasNoEther {
         _;
     }
 
-    /// @dev Only 3 or more admins can do it
-    modifier onlyMultipleAdmins() {}
 
     /*** FUNCTIONS ***/
 
@@ -70,8 +67,16 @@ contract Management is HasNoEther {
     *   If admins count less than 3 it can be called by 1 admin
     *   @param adminAddress         Address of existing admin
     **/
-    function removeAdmin(address adminAddress) onlyMultipleAdmins public {
+    function removeAdmin(address adminAddress) onlyAdmins public {
+        // Require that number of admins is more than one
+        require(adminCount > 1);
+        // Require that address exists
+        require(isAdmin(adminAddress));
 
+        delete ownerMapping(adminAddress);
+        adminCount--;
+
+        AdminWasRemoved(adminAddress);
     }
 
     /**
