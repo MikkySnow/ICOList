@@ -23,7 +23,7 @@ contract BusinessLogic is Pausable {
     uint256 constant public CONTRIBUTE_FEE = 1;
 
     /// @dev How much ether needs to create crowdsale
-    uint256 constant public CROWDSALE_FEE = 0.01;
+    uint256 constant public CROWDSALE_FEE = 1;
 
     /*** FUNCTIONS ***/
 

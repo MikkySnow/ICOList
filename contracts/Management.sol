@@ -73,7 +73,7 @@ contract Management is HasNoEther {
         // Require that address exists
         require(isAdmin(adminAddress));
 
-        delete ownerMapping(adminAddress);
+        delete ownerMapping[adminAddress];
         adminCount--;
 
         AdminWasRemoved(adminAddress);

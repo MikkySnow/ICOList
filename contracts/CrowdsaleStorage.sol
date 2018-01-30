@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
 import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
-
+import "./Management.sol";
 /**
 *   @title Storage contract for crowdsales.
 *   @dev There stored data of all crowdsales
@@ -83,6 +83,6 @@ contract CrowdsaleStorage is HasNoEther, Management {
     **/
     function _setCrowdsaleEnded(uint256 _crowdsaleId) internal {
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Ended;
-        CrowdsaleWasEnded(_crowdsaleEnded);
+        CrowdsaleWasEnded(_crowdsaleId);
     }
 }
