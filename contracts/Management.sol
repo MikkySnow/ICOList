@@ -9,7 +9,25 @@ import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
 **/
 contract Management is HasNoEther {
 
+    /*** STORAGE ***/
+
+    // An array for all admins
+    address[] admins;
+
+    // A mapping for approval that address is owner
+    mapping (address => bool) ownerMapping;
+
+    /*** MODIFIERS ***/
+
+    /// @dev Only admins modifier
+    modifier onlyAdmins() {}
+
+    /*** FUNCTIONS ***/
+
+    /// @dev Default constructor for Management contract
+    // mgs.sender will be assigned as first admin
     function Management(){
 
     }
+
 }
