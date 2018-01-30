@@ -25,6 +25,12 @@ contract CrowdsaleStorage is HasNoEther, Management {
         CrowdsaleStatus status;
     }
 
+    /// @dev Basic struct for crowdsale activation proposal
+    struct CrowdsaleProposal {
+        uint256 crowdsaleId;
+        address[3] agreedAdmins;
+    }
+
     /*** STORAGE ***/
 
     /// @dev An array where stored all crowdsales
@@ -85,4 +91,18 @@ contract CrowdsaleStorage is HasNoEther, Management {
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Ended;
         CrowdsaleWasEnded(_crowdsaleId);
     }
+
+    /**
+    *   @dev Creates proposal, which crowdsale make active
+    *   If there more than 3 admins, crowdsale can be set active only by 3 admins
+    *   If there less than 3 admins, crowdsale can be set active by 1 admin
+    *   @param _crowdsaleId         id of chosen crowdsale
+    **/
+    function addCrowdsaleActivationProposal(uint256 _crowdsaleId);
+
+    /**
+    *   @dev Checks if admin already signed proposal
+    *   @param _crowdsaleId         id of chosen crowdsale
+    **/
+    function isAlreadySigned(address _adminAddress) constant returns (bool);
 }
