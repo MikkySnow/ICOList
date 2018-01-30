@@ -9,7 +9,7 @@ import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
 *   In case of any bugs or exploits we can redeploy our contract for logic and keep data safe
 *   Storage implement only create and retrieve functions
 **/
-contract CrowdsaleStorage is HasNoEther {
+contract CrowdsaleStorage is HasNoEther, Management {
 
     /// @dev Enum for crowdsale status
     enum CrowdsaleStatus {
