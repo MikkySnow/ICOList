@@ -17,6 +17,13 @@ contract BusinessLogic is Management {
     /// @dev Emits when somebody withdraws money from contract
     event MoneyWithdrawal(uint256 _amount, address _address);
 
+    /// @dev Emits when new MoneyVault address was set
+    event NewMoneyVaultAddress(address _address, address _setBy);
+
+    /// @dev Emits when new CrowdsaleStorage address was set
+    event NewCrowdsaleStorageAddress(address _adress, address _setBy);
+
+
     /*** VARIABLES ***/
 
     /// @dev How much fee we take
@@ -24,6 +31,13 @@ contract BusinessLogic is Management {
 
     /// @dev How much ether needs to create crowdsale
     uint256 constant public CROWDSALE_FEE = 1;
+
+    /// @dev Address of vault where stored users ether
+    address moneyVaultAddress;
+
+    /// @dev Address of storage where all crowdsales stored
+    address crowdsaleStorageAddress;
+
 
     /*** STORAGE ***/
 
@@ -76,6 +90,7 @@ contract BusinessLogic is Management {
     /**
     *   @dev Function for crowdsale contributing by users
     *   Contributing of crowdsale takes some fees
+    *   User money sends to MoneyVault
     **/
     function contribute() payable whenNotPaused public {
 
