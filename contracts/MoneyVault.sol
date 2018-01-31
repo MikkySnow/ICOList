@@ -30,7 +30,7 @@ contract MoneyVault {
     /**
      *  @dev Stores ether in MoneyVault contract
      */
-    function deposit() payable external {
-        deposited[msg.sender].add(msg.value);
+    function deposit(address _to, uint256 _amount) external {
+        deposited[_to].add(_amount);
     }
 }
