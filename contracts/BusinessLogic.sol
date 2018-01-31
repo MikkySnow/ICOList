@@ -3,6 +3,12 @@ pragma solidity ^0.4.18;
 import "./Management.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 
+// This imports should be changed to .call()
+import "./MoneyVault.sol";
+import "./CrowdsaleStorage.sol";
+import "zeppelin-solidity/contracts/token/ERC20/BasicToken.sol";
+import "zeppelin-solidity/contracts/crowdsale/Crowdsale.sol";
+
 /**
 *   @title Contract for business logic
 *   @dev There implemented all business logic
@@ -66,16 +72,32 @@ contract BusinessLogic is Management {
     *   User money sends to MoneyVault
     **/
     function contribute() payable whenNotPaused public {
-        uint256 memory amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
+        uint256 amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
         moneyVaultAddress.transfer(amount);
         MoneyVault(moneyVaultAddress).deposit(msg.sender, amount);
     }
 
     /**
      *  @dev Function for claiming tokens if crowdsale was successful
+     *  todo: Change Converting to .call()
      */
     function claimTokens() public {
+        // Getting instance of CrowdsaleStorage and token address
+        CrowdsaleStorage crowdsaleStorage = CrowdsaleStorage(crowdsaleStorageAddress);
+        BasicToken token = BasicToken(crowdsaleStorage.getCrowdsaleToken());
 
+        // Getting crowdsale instance for getting conversion rate
+        Crowdsale crowdsale = Crowdsale(crowdsaleStorage.getCrowdsaleAddress());
+
+        // If balanceOf greater than 0, we bought some tokens
+        require(token.balanceOf(this) > 0);
+
+        // Getting how much tokens user should get
+        // todo: Write calculation for amount
+        uint256 amount = 0;
+
+        // Transfer tokens to user
+        token.transfer(msg.sender, amount);
     }
 
     /**
@@ -83,7 +105,7 @@ contract BusinessLogic is Management {
      *   Works the same as contribute()
      */
     function() public payable {
-        uint256 memory amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
+        uint256 amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
         moneyVaultAddress.transfer(amount);
         MoneyVault(moneyVaultAddress).deposit(msg.sender, amount);
     }
