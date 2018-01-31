@@ -33,7 +33,9 @@ contract BusinessLogic is Management {
     *   @param _address         Address to withdraw
     *   @param _amount          Amount to withdraw
     **/
-    function withdraw(address _address, uint256 _amount) ;
+    function withdraw(address _address, uint256 _amount) {
+
+    }
 
     /**
     *   @dev Function for creating crowdsale by user
@@ -46,20 +48,26 @@ contract BusinessLogic is Management {
     *   @param _wallet          Address of crowdsale wallet
     *   @param _token           Address of crowdsale token
     **/
-    function createCrowdsale(uint256 _start, uint256 _end, uint256 _rate, uint256 _goal, uint256 _cap, address _wallet, address _token) public payable;
+    function createCrowdsale(uint256 _start, uint256 _end, uint256 _rate, uint256 _goal, uint256 _cap, address _wallet, address _token)
+    public whenNotPaused payable {
+
+    }
 
     /**
     *   @dev Function for crowdsale contributing by users
-    *   Contributing of crowdsale takes some fee
-    *   @param _crowdsaleId     ID of chosen crowdsale
+    *   Contributing of crowdsale takes some fees
     **/
-    function contributeCrowdsale(uint256 _crowdsaleId)  payable public;
+    function contributeCrowdsale() payable whenNotPaused public {
+
+    }
 
     /**
     *   @dev Function for claiming our ether back, if crowdsale fails
     *   @param _crowdsaleId     ID of chosen crowdsale
     **/
-    function claimRefunds(uint256 _crowdsaleId) public;
+    function claimRefunds(uint256 _crowdsaleId) public {
+
+    }
 
     /**
      *   @dev Overrides disallowing function to receive ether
