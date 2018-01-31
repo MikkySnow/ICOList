@@ -64,7 +64,7 @@ contract BusinessLogic is Management {
     **/
     function withdraw(address _address, uint256 _amount) internal {
         require(this.balance >= _amount);
-        _address.send(_amount);
+        _address.transfer(_amount);
 
         MoneyWithdrawal(_amount, _address);
     }
