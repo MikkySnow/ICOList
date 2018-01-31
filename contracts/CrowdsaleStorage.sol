@@ -11,6 +11,9 @@ import "./Management.sol";
 **/
 contract CrowdsaleStorage is Management {
 
+    /// @dev Active crowdsale id
+    uint256 activeCrowdsaleId;
+
     /// @dev Enum for crowdsale status
     enum CrowdsaleStatus {
         Waiting,        // For crowdsales, which waiting for acceptance from admins
@@ -25,11 +28,6 @@ contract CrowdsaleStorage is Management {
         CrowdsaleStatus status;
     }
 
-    /// @dev Basic struct for crowdsale activation proposal
-    struct CrowdsaleProposal {
-        uint256 crowdsaleId;
-        address[3] agreedAdmins;
-    }
 
     /*** STORAGE ***/
 
