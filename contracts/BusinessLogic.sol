@@ -79,14 +79,6 @@ contract BusinessLogic is Management {
     }
 
     /**
-    *   @dev Function for claiming our ether back, if crowdsale fails
-    *   @param _crowdsaleId     ID of chosen crowdsale
-    **/
-    function claimRefunds(uint256 _crowdsaleId) public {
-
-    }
-
-    /**
      *  @dev Function for claiming tokens if crowdsale was successful
      */
     function claimTokens() {
