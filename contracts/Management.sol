@@ -121,7 +121,7 @@ contract Management{
     /**
      * @dev called by the owner to pause, triggers stopped state
      */
-    function pause() onlyOwner whenNotPaused public {
+    function pause() onlyAdmins whenNotPaused public {
         paused = true;
         Pause();
     }
@@ -129,14 +129,15 @@ contract Management{
     /**
      * @dev called by the owner to unpause, returns to normal state
      */
-    function unpause() onlyOwner whenPaused public {
+    function unpause() onlyAdmins whenPaused public {
         paused = false;
         Unpause();
     }
 
     /**
-     * @dev Disallows direct send by settings a default function without the `payable` flag.
+     * @dev Disallows sending ether
      */
-    function () external {
+    function () payable {
+        require(msg.value == 0);
     }
 }

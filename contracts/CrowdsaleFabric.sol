@@ -1,8 +1,7 @@
 pragma solidity ^0.4.18;
 
-import "zeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "./BasicCrowdsale.sol";
-import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
+import "./Management.sol";
 
 /**
 *   @title Fabric for crowdsales
@@ -10,7 +9,7 @@ import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
 *   There're not common interface for crowdsale, so
 *   we should use fabric to avoid it. Also by using fabric we can support interactive crowdsale
 **/
-contract CrowdsaleFabric is Pausable, HasNoEther {
+contract CrowdsaleFabric is Management {
 
     /*** EVENTS ***/
 

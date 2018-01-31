@@ -9,7 +9,7 @@ import "./Management.sol";
 *   In case of any bugs or exploits we can redeploy our contract for logic and keep data safe
 *   Storage implement only create and retrieve functions
 **/
-contract CrowdsaleStorage is HasNoEther, Management {
+contract CrowdsaleStorage is Management {
 
     /// @dev Enum for crowdsale status
     enum CrowdsaleStatus {
@@ -102,7 +102,7 @@ contract CrowdsaleStorage is HasNoEther, Management {
 
     /**
     *   @dev Checks if admin already signed proposal
-    *   @param _crowdsaleId         id of chosen crowdsale
+    *
     **/
     function isAlreadySigned(address _adminAddress) constant returns (bool);
 }

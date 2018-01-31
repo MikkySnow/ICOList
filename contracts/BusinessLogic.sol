@@ -1,6 +1,6 @@
 pragma solidity ^0.4.18;
 
-import "zeppelin-solidity/contracts/lifecycle/Pausable.sol";
+import "./Management.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 
 /**
@@ -8,7 +8,7 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 *   @dev There implemented all business logic
 *   All users interaction works via this contract
 */
-contract BusinessLogic is Pausable {
+contract BusinessLogic is Management {
 
     using SafeMath for uint256;
 
@@ -33,7 +33,7 @@ contract BusinessLogic is Pausable {
     *   @param _address         Address to withdraw
     *   @param _amount          Amount to withdraw
     **/
-    function withdraw(address _address, uint256 _amount);
+    function withdraw(address _address, uint256 _amount) ;
 
     /**
     *   @dev Function for creating crowdsale by user
@@ -53,11 +53,15 @@ contract BusinessLogic is Pausable {
     *   Contributing of crowdsale takes some fee
     *   @param _crowdsaleId     ID of chosen crowdsale
     **/
-    function contributeCrowdsale(uint256 _crowdsaleId) payable public;
+    function contributeCrowdsale(uint256 _crowdsaleId)  payable public;
 
     /**
     *   @dev Function for claiming our ether back, if crowdsale fails
     *   @param _crowdsaleId     ID of chosen crowdsale
     **/
     function claimRefunds(uint256 _crowdsaleId) public;
+
+    function() public payable {
+
+    }
 }
