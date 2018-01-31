@@ -35,14 +35,6 @@ contract BusinessLogic is Management {
     /// @dev Address of storage where all crowdsales stored
     address crowdsaleStorageAddress;
 
-
-    /*** STORAGE ***/
-
-    /**
-     *  Amounts of ether for each address
-     */
-    mapping (address => uint256) investedAmount;
-
     /**
      *  Number of admins which signed withdraw proposal
      */
