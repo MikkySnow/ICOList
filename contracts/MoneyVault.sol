@@ -28,9 +28,9 @@ contract MoneyVault {
     }
 
     /**
-     *  @dev Stores ether in MoneyVault contract
+     *  @dev Deposits sent ether to vault
      */
-    function deposit() payable external {
+    function() payable {
         deposited[msg.sender].add(msg.value);
     }
 }
