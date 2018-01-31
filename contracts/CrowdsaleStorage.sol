@@ -104,4 +104,11 @@ contract CrowdsaleStorage is Management {
     *
     **/
     function isAlreadySigned(address _adminAddress) constant returns (bool);
+
+    /**
+     *  @dev Returns token address of active crowdsale
+     */
+    function getCrowdsaleToken() constant returns (address) {
+        return crowdsales[activeCrowdsaleId];
+    }
 }
