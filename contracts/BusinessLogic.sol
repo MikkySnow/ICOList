@@ -81,7 +81,7 @@ contract BusinessLogic is Management {
     /**
      *  @dev Function for claiming tokens if crowdsale was successful
      */
-    function claimTokens() {
+    function claimTokens() public {
 
     }
 
@@ -111,7 +111,7 @@ contract BusinessLogic is Management {
      *  @param _address         Address to withdraw
      *  @param _amount          Amount to withdraw
      */
-    function acceptWithdrawal(uint256 _amount, address _address) onlyAdmins {
+    function acceptWithdrawal(uint256 _amount, address _address) onlyAdmins public {
         // One person can't vote twice
         require(!isSigned(msg.sender));
         // We cannot withdraw to zero address
@@ -138,7 +138,7 @@ contract BusinessLogic is Management {
     /**
      *  @dev Decline money withdrawal
      */
-    function declineWithdrawal() onlyAdmins {
+    function declineWithdrawal() onlyAdmins public {
         // One person can't vote twice
         require(!isSigned(msg.sender));
 
