@@ -73,11 +73,10 @@ contract BusinessLogic is Management {
     *   @dev Function for crowdsale contributing by users
     *   Contributing of crowdsale takes some fees
     *   User money sends to MoneyVault
-    *   todo: Доделать дома все этот вызов
     **/
     function contribute() payable whenNotPaused public {
-        // Добавить снятие комиссии
-        moneyVaultAddress.delegatecall(bytes4(keccak256("deposit()")), msg.value);
+        moneyVaultAddress.transfer(msg.value);
+        MoneyVault(moneyVaultAddress).deposit(msg.sender, msg.value);
     }
 
     /**
