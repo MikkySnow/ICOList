@@ -61,6 +61,9 @@ contract BusinessLogic is Management {
     **/
     function claimRefunds(uint256 _crowdsaleId) public;
 
+    /**
+     *   @dev Overrides disallowing function to receive ether
+     */
     function() public payable {
 
     }
