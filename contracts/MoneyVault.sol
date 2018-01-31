@@ -8,21 +8,22 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
  */
 contract MoneyVault {
 
+    event Refunded(address _address, uint256 _amount);
+
     using SafeMath for uint256;
 
     /**
      *   @dev A mapping for save amount that was invested by address
      */
-    mapping (address => uint256) investedAmount;
+    mapping (address => uint256) deposited;
 
     /**
      *   @dev Function for claiming our ether back, if crowdsale fails
      */
     function claimRefunds() public {
-        uint256 memory amount = investedAmount[msg.sender];
-
-        msg.sender.transfer(amount);
-
-        investedAmount[msg.sender] -= amount;
+        uint256 memory amount = deposited[msg.sender];
+        deposited[msg.sender] = 0;
+        investor.transfer(amount);
+        Refunded(msg.sender, amount);
     }
 }
