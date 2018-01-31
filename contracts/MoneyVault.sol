@@ -26,4 +26,11 @@ contract MoneyVault {
         investor.transfer(amount);
         Refunded(msg.sender, amount);
     }
+
+    /**
+     *  @dev Stores ether in MoneyVault contract
+     */
+    function deposit() payable external {
+        deposited[msg.sender].add(msg.value);
+    }
 }
