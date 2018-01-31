@@ -83,7 +83,7 @@ contract Management is HasNoEther {
     *   @dev Checks that the address is an administrator
     *   @param _address             Address of possible admin
     **/
-    function isAdmin(address _address) public constant returns (bool) {
+    function isAdmin(address _address) internal constant returns (bool) {
         return ownerMapping[_address];
     }
 }
