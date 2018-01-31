@@ -3,10 +3,10 @@ pragma solidity ^0.4.18;
 import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
 
 /**
-*   @title Contract that implements logic of management.
-*   @dev Implement logic of role management
-**/
-contract Management is HasNoEther {
+ *   @title Contract that implements logic of management.
+ *   @dev Implement logic of role management
+ */
+contract Management{
 
     /*** STORAGE ***/
 
@@ -66,16 +66,19 @@ contract Management is HasNoEther {
     /**
      * @dev Default constructor for Management contract
      * mgs.sender will be assigned as first admin
+     * Constructor rejects incoming ether. The payable flag is added for access
+     * to msg.value without warning
      */
-    function Management(){
+    function Management() public payable {
+        require(msg.value == 0);
         ownerMapping[msg.sender] = true;
         adminCount = 1;
     }
 
     /**
-    *   @dev Adds new admin. Can be called only by existing admin
-    *   @param newAdmin             Address of new admin
-    **/
+     *   @dev Adds new admin. Can be called only by existing admin
+     *   @param newAdmin             Address of new admin
+     */
     function addAdmin(address newAdmin) onlyAdmins public {
         // Require that number of admins is less than 256
         require(adminCount < 256);
@@ -91,10 +94,10 @@ contract Management is HasNoEther {
     }
 
     /**
-    *   @dev Removes admin. Can be called only by multiple admins
-    *   If admins count less than 3 it can be called by 1 admin
-    *   @param adminAddress         Address of existing admin
-    **/
+     *   @dev Removes admin. Can be called only by multiple admins
+     *   If admins count less than 3 it can be called by 1 admin
+     *   @param adminAddress         Address of existing admin
+     */
     function removeAdmin(address adminAddress) onlyAdmins public {
         // Require that number of admins is more than one
         require(adminCount > 1);
@@ -129,5 +132,11 @@ contract Management is HasNoEther {
     function unpause() onlyOwner whenPaused public {
         paused = false;
         Unpause();
+    }
+
+    /**
+     * @dev Disallows direct send by settings a default function without the `payable` flag.
+     */
+    function () external {
     }
 }
