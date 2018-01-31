@@ -166,4 +166,30 @@ contract BusinessLogic is Management {
             delete signedAdmins[i];
         }
     }
+
+    /**
+     *  @dev Sets MoneyVault contract address
+     *  @param _address         New address of MoneyVault contract
+     */
+    function setMoneyVaultAddress(address _address) onlyAdmins whenPaused public {
+        // We cannot set contract address to zero
+        require(_address != 0x0);
+        // Sets new address
+        moneyVaultAddress = _address;
+        // Emits event
+        NewMoneyVaultAddress(_address, msg.sender);
+    }
+
+    /**
+     *  @dev Sets CrowdsaleStorage contract address
+     *  @param _address         New address of CrowdsaleStorage contract
+     */
+    function setCrowdsaleStorageAddress(address _address) onlyAdmins whenPaused public {
+        // We cannot set contract address to zero
+        require(_address != 0x0);
+        // Sets new address
+        crowdsaleStorageAddress = _address;
+        // Emits event
+        NewCrowdsaleStorageAddress(_address, msg.sender);
+    }
 }
