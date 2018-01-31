@@ -1,7 +1,5 @@
 pragma solidity ^0.4.18;
 
-import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
-
 /**
  *   @title Contract that implements logic of management.
  *   @dev Implement logic of role management
