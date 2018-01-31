@@ -10,8 +10,6 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 */
 contract BusinessLogic is Management {
 
-    using SafeMath for uint256;
-
     /*** EVENTS ***/
 
     /// @dev Emits when somebody withdraws money from contract
@@ -69,22 +67,6 @@ contract BusinessLogic is Management {
         _address.send(_amount);
 
         MoneyWithdrawal(_amount, _address);
-    }
-
-    /**
-    *   @dev Function for creating crowdsale by user
-    *   Creation of crowdsale costs some ether
-    *   @param _start           Crowdsale start timestamp
-    *   @param _end             Crowdsale end timestamp
-    *   @param _rate            How much tokens we get for 1 ether
-    *   @param _goal            Goal of crowdsale
-    *   @param _cap             Minimal amount of funds
-    *   @param _wallet          Address of crowdsale wallet
-    *   @param _token           Address of crowdsale token
-    **/
-    function createCrowdsale(uint256 _start, uint256 _end, uint256 _rate, uint256 _goal, uint256 _cap, address _wallet, address _token)
-    public whenNotPaused payable onlyAdmins {
-
     }
 
     /**
