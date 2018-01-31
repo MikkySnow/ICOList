@@ -109,6 +109,13 @@ contract CrowdsaleStorage is Management {
      *  @dev Returns token address of active crowdsale
      */
     function getCrowdsaleToken() constant returns (address) {
-        return crowdsales[activeCrowdsaleId];
+        return crowdsales[activeCrowdsaleId].tokenAddress;
+    }
+
+    /**
+     *  @dev Returns crowdsale address of active crowdsale
+     */
+    function getCrowdsaleAddress() constant returns (address) {
+        return crowdsales[activeCrowdsaleId].crowdsaleAddress;
     }
 }
