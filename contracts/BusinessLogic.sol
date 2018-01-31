@@ -10,6 +10,8 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 */
 contract BusinessLogic is Management {
 
+    using SafeMath for uint256;
+
     /*** EVENTS ***/
 
     /// @dev Emits when somebody withdraws money from contract
@@ -26,9 +28,6 @@ contract BusinessLogic is Management {
 
     /// @dev How much fee we take
     uint256 constant public CONTRIBUTE_FEE = 1;
-
-    /// @dev How much ether needs to create crowdsale
-    uint256 constant public CROWDSALE_FEE = 1;
 
     /// @dev Address of vault where stored users ether
     address moneyVaultAddress;
@@ -75,8 +74,9 @@ contract BusinessLogic is Management {
     *   User money sends to MoneyVault
     **/
     function contribute() payable whenNotPaused public {
-        moneyVaultAddress.transfer(msg.value);
-        MoneyVault(moneyVaultAddress).deposit(msg.sender, msg.value);
+        uint256 memory amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
+        moneyVaultAddress.transfer(amount);
+        MoneyVault(moneyVaultAddress).deposit(msg.sender, amount);
     }
 
     /**
@@ -88,9 +88,12 @@ contract BusinessLogic is Management {
 
     /**
      *   @dev Overrides disallowing function to receive ether
-     *   todo: Добавить взятие комисии и переход к contribute
+     *   Works the same as contribute()
      */
     function() public payable {
+        uint256 memory amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
+        moneyVaultAddress.transfer(amount);
+        MoneyVault(moneyVaultAddress).deposit(msg.sender, amount);
     }
 
     /**
