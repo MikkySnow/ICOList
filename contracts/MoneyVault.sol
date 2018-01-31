@@ -33,4 +33,11 @@ contract MoneyVault {
     function deposit(address _to, uint256 _amount) external {
         deposited[_to].add(_amount);
     }
+
+    /**
+     *  @dev Returns amount of stored funds by chosen address
+     */
+    function getAmountOfFunds(address _address) external returns (uint256) {
+        return deposited[_address];
+    }
 }
