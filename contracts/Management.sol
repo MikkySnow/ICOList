@@ -13,6 +13,9 @@ contract Management is HasNoEther {
     /// Number of admins. It cannot be less than 1 and greater than 256
     uint8 adminCount;
 
+    /// State of contract. Some operations cannot be done if contract is paused
+    bool public paused = false;
+
     // A mapping for approval that address is owner
     mapping (address => bool) ownerMapping;
 
@@ -25,20 +28,45 @@ contract Management is HasNoEther {
     // Emits when admin was removed
     event AdminWasRemoved(address removedAdmin);
 
+    // Emits when contract was paused
+    event Pause();
+
+    // Emits when contract was unpaused
+    event Unpause();
 
     /*** MODIFIERS ***/
 
-    /// @dev Only admins modifier
+    /**
+     *@dev Only admins modifier
+     */
     modifier onlyAdmins() {
         require(isAdmin(msg.sender));
+        _;
+    }
+
+    /**
+     * @dev Modifier to make a function callable only when the contract is not paused.
+     */
+    modifier whenNotPaused() {
+        require(!paused);
+        _;
+    }
+
+    /**
+     * @dev Modifier to make a function callable only when the contract is paused.
+     */
+    modifier whenPaused() {
+        require(paused);
         _;
     }
 
 
     /*** FUNCTIONS ***/
 
-    /// @dev Default constructor for Management contract
-    // mgs.sender will be assigned as first admin
+    /**
+     * @dev Default constructor for Management contract
+     * mgs.sender will be assigned as first admin
+     */
     function Management(){
         ownerMapping[msg.sender] = true;
         adminCount = 1;
@@ -85,5 +113,21 @@ contract Management is HasNoEther {
     **/
     function isAdmin(address _address) internal constant returns (bool) {
         return ownerMapping[_address];
+    }
+
+    /**
+     * @dev called by the owner to pause, triggers stopped state
+     */
+    function pause() onlyOwner whenNotPaused public {
+        paused = true;
+        Pause();
+    }
+
+    /**
+     * @dev called by the owner to unpause, returns to normal state
+     */
+    function unpause() onlyOwner whenPaused public {
+        paused = false;
+        Unpause();
     }
 }
