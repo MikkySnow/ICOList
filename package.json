@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "zeppelin-solidity": "^1.6.0"
+    "zeppelin-solidity": "^1.6.0",
+    "lodash": "^4.17.4",
+    "bluebird": "^3.5.1"
   }
 }
