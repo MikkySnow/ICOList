@@ -57,7 +57,7 @@ contract CrowdsaleStorage is Management {
     *   @param _crowdsaleAddress            address of crowdsale contract
     *   @param _tokenAddress                address of token contract
     **/
-    function _addCrowdsale(address _crowdsaleAddress, address _tokenAddress, address _owner) internal {
+    function addCrowdsale(address _crowdsaleAddress, address _tokenAddress, address _owner) onlyAdmins public {
         CrowdsaleInfo memory _crowdsale = CrowdsaleInfo({
             crowdsaleAddress: _crowdsaleAddress,
             tokenAddress: _tokenAddress,
@@ -75,7 +75,7 @@ contract CrowdsaleStorage is Management {
     *   Uses internally by admin contract. Only admins can set it active
     *   @param _crowdsaleId         id of chosen crowdsale
     **/
-    function _setCrowdsaleActive(uint256 _crowdsaleId) internal {
+    function setCrowdsaleActive(uint256 _crowdsaleId) onlyAdmins public {
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
         CrowdsaleBecameActive(_crowdsaleId);
     }
@@ -85,7 +85,7 @@ contract CrowdsaleStorage is Management {
     *   Uses internally in finalization function or can be called by admin contract
     *   @param _crowdsaleId         id of chosen crowdsale
     **/
-    function _setCrowdsaleEnded(uint256 _crowdsaleId) internal {
+    function setCrowdsaleEnded(uint256 _crowdsaleId) onlyAdmins public {
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Ended;
         CrowdsaleWasEnded(_crowdsaleId);
     }
@@ -93,14 +93,14 @@ contract CrowdsaleStorage is Management {
     /**
      *  @dev Returns token address of active crowdsale
      */
-    function getCrowdsaleToken() constant returns (address) {
+    function getCrowdsaleToken() public constant returns (address) {
         return crowdsales[activeCrowdsaleId].tokenAddress;
     }
 
     /**
      *  @dev Returns crowdsale address of active crowdsale
      */
-    function getCrowdsaleAddress() constant returns (address) {
+    function getCrowdsaleAddress() public constant returns (address) {
         return crowdsales[activeCrowdsaleId].crowdsaleAddress;
     }
 }
