@@ -91,20 +91,6 @@ contract CrowdsaleStorage is Management {
     }
 
     /**
-    *   @dev Creates proposal, which crowdsale make active
-    *   If there more than 3 admins, crowdsale can be set active only by 3 admins
-    *   If there less than 3 admins, crowdsale can be set active by 1 admin
-    *   @param _crowdsaleId         id of chosen crowdsale
-    **/
-    function addCrowdsaleActivationProposal(uint256 _crowdsaleId);
-
-    /**
-    *   @dev Checks if admin already signed proposal
-    *
-    **/
-    function isAlreadySigned(address _adminAddress) constant returns (bool);
-
-    /**
      *  @dev Returns token address of active crowdsale
      */
     function getCrowdsaleToken() constant returns (address) {
