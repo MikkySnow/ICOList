@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
-import "zeppelin-solidity/contracts/ownership/HasNoEther.sol";
 import "./Management.sol";
+
 /**
 *   @title Storage contract for crowdsales.
 *   @dev There stored data of all crowdsales
@@ -9,7 +9,10 @@ import "./Management.sol";
 *   In case of any bugs or exploits we can redeploy our contract for logic and keep data safe
 *   Storage implement only create and retrieve functions
 **/
-contract CrowdsaleStorage is HasNoEther, Management {
+contract CrowdsaleStorage is Management {
+
+    /// @dev Active crowdsale id
+    uint256 activeCrowdsaleId;
 
     /// @dev Enum for crowdsale status
     enum CrowdsaleStatus {
@@ -85,5 +88,33 @@ contract CrowdsaleStorage is HasNoEther, Management {
     function _setCrowdsaleEnded(uint256 _crowdsaleId) internal {
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Ended;
         CrowdsaleWasEnded(_crowdsaleId);
+    }
+
+    /**
+    *   @dev Creates proposal, which crowdsale make active
+    *   If there more than 3 admins, crowdsale can be set active only by 3 admins
+    *   If there less than 3 admins, crowdsale can be set active by 1 admin
+    *   @param _crowdsaleId         id of chosen crowdsale
+    **/
+    function addCrowdsaleActivationProposal(uint256 _crowdsaleId);
+
+    /**
+    *   @dev Checks if admin already signed proposal
+    *
+    **/
+    function isAlreadySigned(address _adminAddress) constant returns (bool);
+
+    /**
+     *  @dev Returns token address of active crowdsale
+     */
+    function getCrowdsaleToken() constant returns (address) {
+        return crowdsales[activeCrowdsaleId].tokenAddress;
+    }
+
+    /**
+     *  @dev Returns crowdsale address of active crowdsale
+     */
+    function getCrowdsaleAddress() constant returns (address) {
+        return crowdsales[activeCrowdsaleId].crowdsaleAddress;
     }
 }
