@@ -81,25 +81,21 @@ contract BusinessLogic is Management {
 
     /**
      *  @dev Function for claiming tokens if crowdsale was successful
-     *  todo: Change Converting to .call()
      */
     function claimTokens() public {
-        // Getting instance of CrowdsaleStorage and token address
-        CrowdsaleStorage crowdsaleStorage = CrowdsaleStorage(crowdsaleStorageAddress);
-        BasicToken token = BasicToken(crowdsaleStorage.getCrowdsaleToken());
 
-        // Getting crowdsale instance for getting conversion rate
-        Crowdsale crowdsale = Crowdsale(crowdsaleStorage.getCrowdsaleAddress());
+        // Getting crowdsale and token addresses
+        address crowdsaleAddress = crowdsaleStorageAddress.call(bytes4(sha3("getCrowdsaleAddress()")));
+        address tokenAddress = crowdsaleStorageAddress.call(bytes4(sha3("getCrowdsaleToken()")));
 
-        // If balanceOf greater than 0, we bought some tokens
-        require(token.balanceOf(this) > 0);
+        // If balanceOf greater than 0, that mean we've bought some tokens
+        require(tokenAddress.call(bytes4(sha3("balanceOf(address)")), this) > 0);
 
         // Getting how much tokens user should get
-        // todo: Write calculation for amount
-        uint256 amount = 0;
+
 
         // Transfer tokens to user
-        token.transfer(msg.sender, amount);
+        token.call(bytes4(sha3("transfer(address, uint256")), msg.sender, amount);
     }
 
     /**
