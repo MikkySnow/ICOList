@@ -8,7 +8,7 @@ module.exports = {
             event.watch();
             event.get((error, logs) => {
                 var log = _.filter(logs, filter);
-                if (log) {
+                if (!_.isEmpty(log)) {
                     resolve(log);
                 } else {
                     throw Error("Failed to find filtered event for " + filter.event);
