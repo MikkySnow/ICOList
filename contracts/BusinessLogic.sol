@@ -18,6 +18,7 @@ contract BusinessLogic is Management {
 
     using SafeMath for uint256;
 
+
     /*** EVENTS ***/
 
     /// @dev Emits when somebody withdraws money from contract
@@ -50,6 +51,7 @@ contract BusinessLogic is Management {
      *  An array for signedAddresses
      */
     address[] signedAdmins;
+
 
     /*** FUNCTIONS ***/
 
@@ -106,8 +108,7 @@ contract BusinessLogic is Management {
      */
     function() public payable {
         uint256 amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
-        moneyVaultAddress.transfer(amount);
-        MoneyVault(moneyVaultAddress).deposit(msg.sender, amount);
+        moneyVaultAddress.call.value(amount).gas(25000)(bytes4(sha3("deposit(address)")), msg.sender);
     }
 
     /**
