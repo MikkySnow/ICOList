@@ -1,13 +1,12 @@
 pragma solidity ^0.4.18;
 
 import "./Management.sol";
-import "zeppelin-solidity/contracts/math/SafeMath.sol";
-
-// This imports should be changed to .call()
 import "./MoneyVault.sol";
 import "./CrowdsaleStorage.sol";
+
 import "zeppelin-solidity/contracts/token/ERC20/BasicToken.sol";
 import "zeppelin-solidity/contracts/crowdsale/Crowdsale.sol";
+import "zeppelin-solidity/contracts/math/SafeMath.sol";
 
 /**
 *   @title Contract for business logic
@@ -36,11 +35,11 @@ contract BusinessLogic is Management {
     /// @dev How much fee we take
     uint256 constant public CONTRIBUTE_FEE = 1;
 
-    /// @dev Address of vault where stored users ether
-    address moneyVaultAddress;
+    /// @dev Vault where stored users ether
+    MoneyVault moneyVault;
 
-    /// @dev Address of storage where all crowdsales stored
-    address crowdsaleStorageAddress;
+    /// @dev Storage where all crowdsales stored
+    CrowdsaleStorage crowdsaleStorage;
 
     /**
      *  Number of admins which signed withdraw proposal
@@ -85,17 +84,19 @@ contract BusinessLogic is Management {
     function claimTokens() public {
 
         // Getting crowdsale and token addresses
-        address crowdsaleAddress = crowdsaleStorageAddress.call(bytes4(sha3("getCrowdsaleAddress()")));
-        address tokenAddress = crowdsaleStorageAddress.call(bytes4(sha3("getCrowdsaleToken()")));
+        address crowdsaleAddress = crowdsaleStorage.getCrowdsaleAddress();
+        address tokenAddress = crowdsaleStorage.getCrowdsaleToken();
 
         // If balanceOf greater than 0, that mean we've bought some tokens
-        require(tokenAddress.call(bytes4(sha3("balanceOf(address)")), this) > 0);
+        BasicToken token = BasicToken(tokenAddress);
+        require(token.balanceOf(msg.sender) > 0);
 
         // Getting how much tokens user should get
-
+        Crowdsale crowdsale = Crowdsale(crowdsaleAddress);
+        uint256 amount = crowdsale.rate;
 
         // Transfer tokens to user
-        token.call(bytes4(sha3("transfer(address, uint256")), msg.sender, amount);
+        token.transfer(msg.sender, amount);
     }
 
     /**
@@ -191,7 +192,7 @@ contract BusinessLogic is Management {
         // We cannot set contract address to zero
         require(_address != 0x0);
         // Sets new address
-        moneyVaultAddress = _address;
+        moneyVault = MoneyVault(_address);
         // Emits event
         NewMoneyVaultAddress(_address, msg.sender);
     }
@@ -204,7 +205,7 @@ contract BusinessLogic is Management {
         // We cannot set contract address to zero
         require(_address != 0x0);
         // Sets new address
-        crowdsaleStorageAddress = _address;
+        crowdsaleStorage = CrowdsaleStorage(_address);
         // Emits event
         NewCrowdsaleStorageAddress(_address, msg.sender);
     }
