@@ -21,6 +21,7 @@ contract MoneyVault {
      *   @dev Function for claiming our ether back, if crowdsale fails
      */
     function claimRefunds() public {
+        require(deposited[msg.sender > 0]);
         uint256 amount = deposited[msg.sender];
         deposited[msg.sender] = 0;
         msg.sender.transfer(amount);
