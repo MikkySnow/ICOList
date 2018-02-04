@@ -4,7 +4,12 @@ pragma solidity ^0.4.18;
  *   @title Contract that implements logic of management.
  *   @dev Implement logic of role management
  */
-contract Management{
+contract Management {
+
+    struct NewAdminProposal {
+        address[5] votes;           // Addresses which voted for this proposal
+        uint256 votesNumber;        // Number of votes
+    }
 
     /*** STORAGE ***/
 
@@ -22,6 +27,9 @@ contract Management{
 
     // @dev A mapping for approval that address is owner
     mapping (address => bool) ownerMapping;
+
+    // @dev A mapping where all proposals stored
+    mapping (address => NewAdminProposal) proposals;
 
 
     /*** EVENTS ***/
@@ -83,6 +91,11 @@ contract Management{
     /**
      *   @dev Adds new admin. Can be called only by existing admin
      *   @param newAdmin             Address of new admin
+     *   If function calls first time, it creates proposal of adding new admin
+     *   If function calls multiple times with the same newAdmin param, it votes for
+     *   newAdmin adding. If number of votes for one admin is more than 2, it executes and
+     *   adding new admin.
+     *   Only second admin adds without creating proposal
      */
     function addAdmin(address newAdmin) onlyAdmins public {
         // Require that number of admins is less than 256
@@ -92,10 +105,29 @@ contract Management{
         // Require that it's new admin
         require(!isAdmin(newAdmin));
 
-        ownerMapping[newAdmin] = true;
-        adminCount++;
+        // If we creating the second admin, it can be added without proposal
+        if (adminCount == 1) {
+            ownerMapping[newAdmin] = true;
+            adminCount++;
 
-        AdminWasAdded(newAdmin);
+            AdminWasAdded(newAdmin);
+        } else {
+            // Checks if there enough votes
+            if (proposals[newAdmin].votesNumber > 2) {
+                // Adds new admin
+                ownerMapping[newAdmin] = true;
+                adminCount++;
+                // Remove proposal
+                delete proposals[newAdmin];
+            // If there not enough votes for adding, votes for chosen admin
+            } else {
+                // Checks if admin already voted
+                if (!isAlreadyVoted(msg.sender, newAdmin)) {
+                    proposals[newAdmin].votesNumber++;
+                    proposals[newAdmin].votes.push(msg.sender);
+                }
+            }
+        }
     }
 
     /**
@@ -121,7 +153,7 @@ contract Management{
     *   @dev Checks that the address is an administrator
     *   @param _address             Address of possible admin
     **/
-    function isAdmin(address _address) public constant returns (bool) {
+    function isAdmin(address _address) public view returns (bool) {
         return ownerMapping[_address];
     }
 
@@ -146,5 +178,17 @@ contract Management{
      */
     function () payable {
         require(msg.value == 0);
+    }
+
+    /**
+     *  @dev Checks if address already voted for proposal
+     *  @param _address             Address of admin
+     *  @param _voteFor             Address in proposal
+     */
+    function isAlreadyVoted(address _address, address _voteFor) view internal returns (bool) {
+        for (uint8 i = 0; i < proposals[_voteFor].votes.length - 1; i++) {
+            if (proposals[_voteFor].votes[i] == _address) return true;
+        }
+        return false;
     }
 }
