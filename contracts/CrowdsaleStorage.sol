@@ -119,7 +119,7 @@ contract CrowdsaleStorage is Management {
      *  @param _crowdsaleId            Crowdsale ID
      *  @return address of crowdsale token
      */
-    function getTokensAddressById(uint256 _crowdsaleId) public view returns (address) {
+    function getTokenAddressById(uint256 _crowdsaleId) public view returns (address) {
         return crowdsales[_crowdsaleId].tokenAddress;
     }
 
