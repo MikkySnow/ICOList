@@ -69,8 +69,6 @@ contract BusinessLogic is Management {
 
     }
 
-
-
     /**
      *  @dev Sets MoneyVault contract address
      *  @param _address         New address of MoneyVault contract
