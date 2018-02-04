@@ -1,12 +1,13 @@
 pragma solidity ^0.4.18;
 
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
+import "./Management.sol";
 
 /**
  * @title Contract where user ether stored
  * @dev Admins can only contribute crowdsales
  */
-contract MoneyVault {
+contract MoneyVault is Management {
 
     /**
      *  @dev Emits when somebody want to claim refunds
