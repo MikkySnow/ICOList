@@ -1,13 +1,12 @@
 pragma solidity ^0.4.18;
 
 import "./Management.sol";
-import "zeppelin-solidity/contracts/math/SafeMath.sol";
-
-// This imports should be changed to .call()
 import "./MoneyVault.sol";
 import "./CrowdsaleStorage.sol";
+
 import "zeppelin-solidity/contracts/token/ERC20/BasicToken.sol";
 import "zeppelin-solidity/contracts/crowdsale/Crowdsale.sol";
+import "zeppelin-solidity/contracts/math/SafeMath.sol";
 
 /**
 *   @title Contract for business logic
@@ -17,6 +16,7 @@ import "zeppelin-solidity/contracts/crowdsale/Crowdsale.sol";
 contract BusinessLogic is Management {
 
     using SafeMath for uint256;
+
 
     /*** EVENTS ***/
 
@@ -35,11 +35,11 @@ contract BusinessLogic is Management {
     /// @dev How much fee we take
     uint256 constant public CONTRIBUTE_FEE = 1;
 
-    /// @dev Address of vault where stored users ether
-    address moneyVaultAddress;
+    /// @dev Vault where stored users ether
+    MoneyVault moneyVault;
 
-    /// @dev Address of storage where all crowdsales stored
-    address crowdsaleStorageAddress;
+    /// @dev Storage where all crowdsales stored
+    CrowdsaleStorage crowdsaleStorage;
 
     /**
      *  Number of admins which signed withdraw proposal
@@ -50,6 +50,7 @@ contract BusinessLogic is Management {
      *  An array for signedAddresses
      */
     address[] signedAdmins;
+
 
     /*** FUNCTIONS ***/
 
@@ -79,22 +80,20 @@ contract BusinessLogic is Management {
 
     /**
      *  @dev Function for claiming tokens if crowdsale was successful
-     *  todo: Change Converting to .call()
      */
     function claimTokens() public {
-        // Getting instance of CrowdsaleStorage and token address
-        CrowdsaleStorage crowdsaleStorage = CrowdsaleStorage(crowdsaleStorageAddress);
-        BasicToken token = BasicToken(crowdsaleStorage.getCrowdsaleToken());
 
-        // Getting crowdsale instance for getting conversion rate
-        Crowdsale crowdsale = Crowdsale(crowdsaleStorage.getCrowdsaleAddress());
+        // Getting crowdsale and token addresses
+        address crowdsaleAddress = crowdsaleStorage.getCrowdsaleAddress();
+        address tokenAddress = crowdsaleStorage.getCrowdsaleToken();
 
-        // If balanceOf greater than 0, we bought some tokens
-        require(token.balanceOf(this) > 0);
+        // If balanceOf greater than 0, that mean we've bought some tokens
+        BasicToken token = BasicToken(tokenAddress);
+        require(token.balanceOf(msg.sender) > 0);
 
         // Getting how much tokens user should get
-        // todo: Write calculation for amount
-        uint256 amount = 0;
+        Crowdsale crowdsale = Crowdsale(crowdsaleAddress);
+        uint256 amount = crowdsale.rate;
 
         // Transfer tokens to user
         token.transfer(msg.sender, amount);
@@ -106,8 +105,7 @@ contract BusinessLogic is Management {
      */
     function() public payable {
         uint256 amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
-        moneyVaultAddress.transfer(amount);
-        MoneyVault(moneyVaultAddress).deposit(msg.sender, amount);
+        moneyVaultAddress.call.value(amount).gas(25000)(bytes4(sha3("deposit(address)")), msg.sender);
     }
 
     /**
@@ -194,7 +192,7 @@ contract BusinessLogic is Management {
         // We cannot set contract address to zero
         require(_address != 0x0);
         // Sets new address
-        moneyVaultAddress = _address;
+        moneyVault = MoneyVault(_address);
         // Emits event
         NewMoneyVaultAddress(_address, msg.sender);
     }
@@ -207,7 +205,7 @@ contract BusinessLogic is Management {
         // We cannot set contract address to zero
         require(_address != 0x0);
         // Sets new address
-        crowdsaleStorageAddress = _address;
+        crowdsaleStorage = CrowdsaleStorage(_address);
         // Emits event
         NewCrowdsaleStorageAddress(_address, msg.sender);
     }
