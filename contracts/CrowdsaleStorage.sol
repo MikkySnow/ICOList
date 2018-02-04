@@ -35,9 +35,6 @@ contract CrowdsaleStorage is Management {
     /// @dev An array where stored all crowdsales
     CrowdsaleInfo[] crowdsales;
 
-    /// @dev A mapping from crowdsale index to address that owns it
-    mapping (uint256 => address) indexToOwner;
-
     /*** EVENTS ***/
 
     /// @dev Emits when crowdsale was added to storage
@@ -66,9 +63,7 @@ contract CrowdsaleStorage is Management {
             weiRaised: 0
             });
 
-        uint256 index = crowdsales.push(_crowdsale) - 1;
-        indexToOwner[index] = _owner;
-
+        crowdsales.push(_crowdsale);
         CrowdsaleWasAdded(_crowdsaleAddress, _tokenAddress);
     }
 
@@ -90,12 +85,12 @@ contract CrowdsaleStorage is Management {
             if (proposals[crowdsales[_crowdsaleId].crowdsaleAddress].votesNumber > 2) {
                 crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
                 CrowdsaleBecameActive(_crowdsaleId);
-                delete proposals[crowdsales[_crowdsaleId]];
+                delete proposals[crowdsales[_crowdsaleId].crowdsaleAddress];
             } else {
                 // Checks if admin already voted
-                if (!isAlreadyVoted(msg.sender, crowdsales[_crowdsaleId])) {
-                    proposals[crowdsales[_crowdsaleId]].votesNumber++;
-                    proposals[crowdsales[_crowdsaleId]].votes.push(msg.sender);
+                if (!isAlreadyVoted(msg.sender, crowdsales[_crowdsaleId].crowdsaleAddress)) {
+                    proposals[crowdsales[_crowdsaleId].crowdsaleAddress].votesNumber++;
+                    proposals[crowdsales[_crowdsaleId].crowdsaleAddress].votes.push(msg.sender);
                 }
             }
         }
@@ -108,7 +103,7 @@ contract CrowdsaleStorage is Management {
     **/
     function setCrowdsaleEnded(uint256 _crowdsaleId) onlyAdmins public {
         // Crowdsale cannot be set Ended without being set Active
-        require(crowdsales[_crowdsaleId].status != Waiting);
+        require(crowdsales[_crowdsaleId].status != CrowdsaleStatus.Waiting);
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Ended;
         CrowdsaleWasEnded(_crowdsaleId);
     }
