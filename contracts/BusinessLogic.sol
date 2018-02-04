@@ -50,7 +50,13 @@ contract BusinessLogic is Management {
     *   User money sends to MoneyVault
     **/
     function contribute() payable whenNotPaused public {
+        // Sending ether to MoneyVault contract
+        uint256 amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
+        moneyVault.transfer(amount);
+        moneyVault.deposit(msg.sender, amount);
 
+        // Sending fees to AdminMoneyVault contract
+        adminMoneyVault.transfer(msg.value - amount);
     }
 
     /**
@@ -147,7 +153,7 @@ contract BusinessLogic is Management {
             // Checks if there enough votes
             if (proposals[_address].votesNumber > 2) {
                 // Sets new address
-                crowdsaleStorage = AdminMoneyVault(_address);
+                adminMoneyVault = AdminMoneyVault(_address);
                 // Emits event
                 NewAdminMoneyVaultAddress(_address);
                 // Remove proposal
