@@ -67,6 +67,10 @@ contract CrowdsaleStorage is Management {
         CrowdsaleWasAdded(_crowdsaleAddress, _tokenAddress);
     }
 
+    function setCrowdsaleToken(uint256 _crowdsaleId, address _tokenAddress) onlyAdmins public {
+        crowdsales[_crowdsaleId].tokenAddress = _tokenAddress;
+    }
+
     /**
     *   @dev Sets crowdsale status to active
     *   Uses internally by admin contract. Only admins can set it active
