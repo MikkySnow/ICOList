@@ -78,10 +78,29 @@ contract BusinessLogic is Management {
     function setMoneyVaultAddress(address _address) onlyAdmins whenPaused public {
         // We cannot set contract address to zero
         require(_address != 0x0);
-        // Sets new address
-        moneyVault = MoneyVault(_address);
-        // Emits event
-        NewMoneyVaultAddress(_address);
+
+        if (adminCount == 1) {
+            // Sets new address
+            moneyVault = MoneyVault(_address);
+            // Emits event
+            NewMoneyVaultAddress(_address);
+        } else {
+            // Checks if there enough votes
+            if (proposals[_address].votesNumber > 2) {
+                // Sets new address
+                moneyVault = MoneyVault(_address);
+                // Emits event
+                NewMoneyVaultAddress(_address);
+                // Remove proposal
+                delete proposals[_address];
+            } else {
+                // Checks if admin already voted
+                if (!isAlreadyVoted(msg.sender, _address)) {
+                    proposals[_address].votesNumber++;
+                    proposals[_address].votes.push(msg.sender);
+                }
+            }
+        }
     }
 
     /**
@@ -130,7 +149,7 @@ contract BusinessLogic is Management {
             // Checks if there enough votes
             if (proposals[_address].votesNumber > 2) {
                 // Sets new address
-                crowdsaleStorage = CrowdsaleStorage(_address);
+                crowdsaleStorage = AdminMoneyVault(_address);
                 // Emits event
                 NewAdminMoneyVaultAddress(_address);
                 // Remove proposal
