@@ -26,6 +26,7 @@ contract CrowdsaleStorage is Management {
         address crowdsaleAddress;
         address tokenAddress;
         CrowdsaleStatus status;
+        uint256 weiRaised;
     }
 
 
@@ -129,5 +130,9 @@ contract CrowdsaleStorage is Management {
      */
     function isCrowdsaleFinished(uint256 _crowdsaleId) public view returns (bool) {
         return crowdsales[_crowdsaleId].status == CrowdsaleStatus.Ended;
+    }
+
+    function getWeiRaised(uint256 _crowdsaleId) public view returns (uint256) {
+        return crowdsales[_crowdsaleId].weiRaised;
     }
 }
