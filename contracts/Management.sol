@@ -6,7 +6,7 @@ pragma solidity ^0.4.18;
  */
 contract Management {
 
-    struct NewAdminProposal {
+    struct Proposal {
         address[] votes;           // Addresses which voted for this proposal
         uint256 votesNumber;        // Number of votes
     }
@@ -29,7 +29,7 @@ contract Management {
     mapping (address => bool) ownerMapping;
 
     // @dev A mapping where all proposals stored
-    mapping (address => NewAdminProposal) proposals;
+    mapping (address => Proposal) proposals;
 
 
     /*** EVENTS ***/
