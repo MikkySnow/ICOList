@@ -80,8 +80,25 @@ contract CrowdsaleStorage is Management {
     function setCrowdsaleActive(uint256 _crowdsaleId) onlyAdmins public {
         // Crowdsale cannot be active twice
         require(crowdsales[_crowdsaleId].status != CrowdsaleStatus.Ended);
-        crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
-        CrowdsaleBecameActive(_crowdsaleId);
+        // Checks if crowdsale exists
+        require(crowdsales[_crowdsaleId].crowdsaleAddress != 0x0);
+
+        if (adminCount == 1) {
+            crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
+            CrowdsaleBecameActive(_crowdsaleId);
+        } else {
+            if (proposals[crowdsales[_crowdsaleId].crowdsaleAddress].votesNumber > 2) {
+                crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
+                CrowdsaleBecameActive(_crowdsaleId);
+                delete proposals[crowdsales[_crowdsaleId]];
+            } else {
+                // Checks if admin already voted
+                if (!isAlreadyVoted(msg.sender, crowdsales[_crowdsaleId])) {
+                    proposals[crowdsales[_crowdsaleId]].votesNumber++;
+                    proposals[crowdsales[_crowdsaleId]].votes.push(msg.sender);
+                }
+            }
+        }
     }
 
     /**
