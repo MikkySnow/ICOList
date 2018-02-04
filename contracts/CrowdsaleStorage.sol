@@ -121,4 +121,13 @@ contract CrowdsaleStorage is Management {
     function getTokensAddressById(uint256 _crowdsaleId) public view returns (address) {
         return crowdsales[_crowdsaleId].tokenAddress;
     }
+
+    /**
+     *  @dev Returns status of crowdsale
+     *  @param _crowdsaleId            Crowdsale ID
+     *  @return true if crowdsale finished, false if crowdsale is waiting or active
+     */
+    function isCrowdsaleFinished(uint256 _crowdsaleId) public view returns (bool) {
+        return crowdsales[_crowdsaleId].status == CrowdsaleStatus.Ended;
+    }
 }
