@@ -7,7 +7,7 @@ pragma solidity ^0.4.18;
 contract Management {
 
     struct NewAdminProposal {
-        address[5] votes;           // Addresses which voted for this proposal
+        address[] votes;           // Addresses which voted for this proposal
         uint256 votesNumber;        // Number of votes
     }
 
