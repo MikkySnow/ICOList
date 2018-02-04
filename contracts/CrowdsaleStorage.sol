@@ -62,7 +62,8 @@ contract CrowdsaleStorage is Management {
         CrowdsaleInfo memory _crowdsale = CrowdsaleInfo({
             crowdsaleAddress: _crowdsaleAddress,
             tokenAddress: _tokenAddress,
-            status: CrowdsaleStatus.Waiting
+            status: CrowdsaleStatus.Waiting,
+            weiRaised: 0
             });
 
         uint256 index = crowdsales.push(_crowdsale) - 1;
