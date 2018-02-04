@@ -20,7 +20,7 @@ contract Management{
     // @dev State of contract. Some operations cannot be done if contract is paused
     bool public paused = false;
 
-    // @A mapping for approval that address is owner
+    // @dev A mapping for approval that address is owner
     mapping (address => bool) ownerMapping;
 
 
