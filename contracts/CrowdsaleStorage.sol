@@ -58,7 +58,7 @@ contract CrowdsaleStorage is Management {
     *   @param _crowdsaleAddress            address of crowdsale contract
     *   @param _tokenAddress                address of token contract
     **/
-    function addCrowdsale(address _crowdsaleAddress, address _tokenAddress, address _owner) onlyAdmins public {
+    function addCrowdsale(address _crowdsaleAddress, address _tokenAddress) onlyAdmins public {
         CrowdsaleInfo memory _crowdsale = CrowdsaleInfo({
             crowdsaleAddress: _crowdsaleAddress,
             tokenAddress: _tokenAddress,
@@ -78,6 +78,8 @@ contract CrowdsaleStorage is Management {
     *   @param _crowdsaleId         id of chosen crowdsale
     **/
     function setCrowdsaleActive(uint256 _crowdsaleId) onlyAdmins public {
+        // Crowdsale cannot be active twice
+        require(crowdsales[_crowdsaleId].status != CrowdsaleStatus.Ended);
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
         CrowdsaleBecameActive(_crowdsaleId);
     }
@@ -88,6 +90,8 @@ contract CrowdsaleStorage is Management {
     *   @param _crowdsaleId         id of chosen crowdsale
     **/
     function setCrowdsaleEnded(uint256 _crowdsaleId) onlyAdmins public {
+        // Crowdsale cannot be set Ended without being set Active
+        require(crowdsales[_crowdsaleId].status != Waiting);
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Ended;
         CrowdsaleWasEnded(_crowdsaleId);
     }
