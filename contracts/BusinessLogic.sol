@@ -18,10 +18,13 @@ contract BusinessLogic is Management {
     /*** EVENTS ***/
 
     // @dev Emits when new MoneyVault address was set
-    event NewMoneyVaultAddress(address _address, address _setBy);
+    event NewMoneyVaultAddress(address _address);
 
     // @dev Emits when new CrowdsaleStorage address was set
-    event NewCrowdsaleStorageAddress(address _adress, address _setBy);
+    event NewCrowdsaleStorageAddress(address _address);
+
+    // @dev Emits when new AdminMoneyVault address was set
+    event NewAdminMoneyVaultAddress(address _address);
 
 
     /*** VARIABLES ***/
@@ -78,7 +81,7 @@ contract BusinessLogic is Management {
         // Sets new address
         moneyVault = MoneyVault(_address);
         // Emits event
-        NewMoneyVaultAddress(_address, msg.sender);
+        NewMoneyVaultAddress(_address);
     }
 
     /**
@@ -94,14 +97,42 @@ contract BusinessLogic is Management {
             // Sets new address
             crowdsaleStorage = CrowdsaleStorage(_address);
             // Emits event
-            NewCrowdsaleStorageAddress(_address, msg.sender);
+            NewCrowdsaleStorageAddress(_address);
         } else {
             // Checks if there enough votes
             if (proposals[_address].votesNumber > 2) {
                 // Sets new address
                 crowdsaleStorage = CrowdsaleStorage(_address);
                 // Emits event
-                NewCrowdsaleStorageAddress(_address, msg.sender);
+                NewCrowdsaleStorageAddress(_address);
+                // Remove proposal
+                delete proposals[_address];
+            } else {
+                // Checks if admin already voted
+                if (!isAlreadyVoted(msg.sender, _address)) {
+                    proposals[_address].votesNumber++;
+                    proposals[_address].votes.push(msg.sender);
+                }
+            }
+        }
+    }
+
+    function setAdminMoneyVaultAddress(address _address) onlyAdmins whenPaused public {
+        // We cannot set contract address to zero
+        require(_address != 0x0);
+
+        if (adminCount == 1) {
+            // Sets new address
+            adminMoneyVault = AdminMoneyVault(_address);
+            // Emits event
+            NewAdminMoneyVaultAddress(_address);
+        } else {
+            // Checks if there enough votes
+            if (proposals[_address].votesNumber > 2) {
+                // Sets new address
+                crowdsaleStorage = CrowdsaleStorage(_address);
+                // Emits event
+                NewAdminMoneyVaultAddress(_address);
                 // Remove proposal
                 delete proposals[_address];
             } else {
