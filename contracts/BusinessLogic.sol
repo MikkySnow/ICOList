@@ -3,10 +3,7 @@ pragma solidity ^0.4.18;
 import "./Management.sol";
 import "./MoneyVault.sol";
 import "./CrowdsaleStorage.sol";
-
-import "zeppelin-solidity/contracts/token/ERC20/BasicToken.sol";
-import "zeppelin-solidity/contracts/crowdsale/Crowdsale.sol";
-import "zeppelin-solidity/contracts/math/SafeMath.sol";
+import "./AdminMoneyVault.sol";
 
 /**
 *   @title Contract for business logic
@@ -20,24 +17,26 @@ contract BusinessLogic is Management {
 
     /*** EVENTS ***/
 
-
-    /// @dev Emits when new MoneyVault address was set
+    // @dev Emits when new MoneyVault address was set
     event NewMoneyVaultAddress(address _address, address _setBy);
 
-    /// @dev Emits when new CrowdsaleStorage address was set
+    // @dev Emits when new CrowdsaleStorage address was set
     event NewCrowdsaleStorageAddress(address _adress, address _setBy);
 
 
     /*** VARIABLES ***/
 
-    /// @dev How much fee we take
+    // @dev How much fee we take
     uint256 constant public CONTRIBUTE_FEE = 1;
 
-    /// @dev Vault where stored users ether
+    // @dev Vault where stored users ether
     MoneyVault moneyVault;
 
-    /// @dev Storage where all crowdsales stored
+    // @dev Storage where all crowdsales stored
     CrowdsaleStorage crowdsaleStorage;
+
+    // @dev Vault where stored admins ether
+    AdminMoneyVault adminMoneyVault;
 
 
     /*** FUNCTIONS ***/
@@ -56,20 +55,6 @@ contract BusinessLogic is Management {
      */
     function claimTokens() public {
 
-        // Getting crowdsale and token addresses
-        address crowdsaleAddress = crowdsaleStorage.getCrowdsaleAddress();
-        address tokenAddress = crowdsaleStorage.getCrowdsaleToken();
-
-        // If balanceOf greater than 0, that mean we've bought some tokens
-        BasicToken token = BasicToken(tokenAddress);
-        require(token.balanceOf(msg.sender) > 0);
-
-        // Getting how much tokens user should get
-        Crowdsale crowdsale = Crowdsale(crowdsaleAddress);
-//        uint256 amount = crowdsale.rate;
-
-        // Transfer tokens to user
-//        token.transfer(msg.sender, amount);
     }
 
     /**
