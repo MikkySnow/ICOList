@@ -43,4 +43,11 @@ contract MoneyVault {
     function getAmountOfFunds(address _address) constant public returns (uint256) {
         return deposited[_address];
     }
+
+    /**
+     *  @dev Sends all ether to crowdsale contract
+     */
+    function sendEtherToCrowdsale(address _crowdsale) public onlyAdmins {
+
+    }
 }
