@@ -103,4 +103,22 @@ contract CrowdsaleStorage is Management {
     function getCrowdsaleAddress() public constant returns (address) {
         return crowdsales[activeCrowdsaleId].crowdsaleAddress;
     }
+
+    /**
+     *  @dev Returns crowdsale address by its id
+     *  @param _crowdsaleId            Crowdsale ID
+     *  @return address of crowdsale
+     */
+    function getCrowdsaleAddressById(uint256 _crowdsaleId) public view returns (address) {
+        return crowdsales[_crowdsaleId].crowdsaleAddress;
+    }
+
+    /**
+     *  @dev Returns crowdsale token address by its id
+     *  @param _crowdsaleId            Crowdsale ID
+     *  @return address of crowdsale token
+     */
+    function getTokensAddressById(uint256 _crowdsaleId) public view returns (address) {
+        return crowdsales[_crowdsaleId].tokenAddress;
+    }
 }
