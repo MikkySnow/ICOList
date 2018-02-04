@@ -8,34 +8,40 @@ contract Management{
 
     /*** STORAGE ***/
 
-    /// Number of admins. It cannot be less than 1 and greater than 256
+    // @dev Number of admins. It cannot be less than 1 and greater than 256
     uint8 adminCount;
 
-    /// State of contract. Some operations cannot be done if contract is paused
+    /**
+     * @dev Address of founder
+     * @dev Founder cannot be removed from admins list
+     */
+    address founder;
+
+    // @dev State of contract. Some operations cannot be done if contract is paused
     bool public paused = false;
 
-    // A mapping for approval that address is owner
+    // @A mapping for approval that address is owner
     mapping (address => bool) ownerMapping;
 
 
     /*** EVENTS ***/
 
-    // Emits when new admin was added
+    // @dev Emits when new admin was added
     event AdminWasAdded(address newAdmin);
 
-    // Emits when admin was removed
+    // @dev Emits when admin was removed
     event AdminWasRemoved(address removedAdmin);
 
-    // Emits when contract was paused
+    // @dev Emits when contract was paused
     event Pause();
 
-    // Emits when contract was unpaused
+    // @dev Emits when contract was unpaused
     event Unpause();
 
     /*** MODIFIERS ***/
 
     /**
-     *@dev Only admins modifier
+     * @dev Only admins modifier
      */
     modifier onlyAdmins() {
         require(isAdmin(msg.sender));
@@ -70,6 +76,7 @@ contract Management{
     function Management() public payable {
         require(msg.value == 0);
         ownerMapping[msg.sender] = true;
+        founder = msg.sender;
         adminCount = 1;
     }
 
@@ -79,7 +86,7 @@ contract Management{
      */
     function addAdmin(address newAdmin) onlyAdmins public {
         // Require that number of admins is less than 256
-        require(adminCount < 256);
+        require(adminCount < 5);
         // Require that address is not zero
         require(newAdmin != 0x0);
         // Require that it's new admin
@@ -93,12 +100,14 @@ contract Management{
 
     /**
      *   @dev Removes admin. Can be called only by multiple admins
-     *   If admins count less than 3 it can be called by 1 admin
+     *   @dev If admins count less than 3 it can be called by 1 admin
      *   @param adminAddress         Address of existing admin
      */
     function removeAdmin(address adminAddress) onlyAdmins public {
         // Require that number of admins is more than one
         require(adminCount > 1);
+        // Require that address is not founder
+        require(adminAddress != founder);
         // Require that address exists
         require(isAdmin(adminAddress));
 
