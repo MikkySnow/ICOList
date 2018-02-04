@@ -74,7 +74,7 @@ contract BusinessLogic is Management {
         uint256 invested = moneyVault.getAmountOfFunds(msg.sender);
         uint256 amount = token.balanceOf(this);
 
-        token.transfer(msg.sender, amount.div(raised).mul(amount));
+        token.transfer(msg.sender, amount.div(raised).mul(invested));
     }
 
     /**
