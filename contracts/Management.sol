@@ -176,7 +176,7 @@ contract Management {
     /**
      * @dev Disallows sending ether
      */
-    function () payable {
+    function () public payable {
         require(msg.value == 0);
     }
 
