@@ -49,6 +49,6 @@ contract MoneyVault is Management {
      *  @dev Sends all ether to crowdsale contract
      */
     function sendEtherToCrowdsale(address _crowdsale) public onlyAdmins {
-
+        _crowdsale.transfer(this.balance);
     }
 }
