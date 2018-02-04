@@ -35,7 +35,7 @@ contract MoneyVault is Management {
      *  @dev Stores ether in MoneyVault contract
      */
     function deposit(address _to, uint256 _amount) external {
-        deposited[_to].add(_amount);
+        deposited[_to] = deposited[_to].add(_amount);
     }
 
     /**
