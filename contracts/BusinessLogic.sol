@@ -71,8 +71,7 @@ contract BusinessLogic is Management {
      *   Works the same as contribute()
      */
     function() public payable {
-        uint256 amount = msg.value.mul(CONTRIBUTE_FEE).div(100);
-
+        contribute();
     }
 
     /**
