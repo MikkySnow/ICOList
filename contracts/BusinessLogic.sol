@@ -4,6 +4,7 @@ import "./Management.sol";
 import "./MoneyVault.sol";
 import "./CrowdsaleStorage.sol";
 import "./AdminMoneyVault.sol";
+import "zeppelin-solidity/contracts/token/ERC20/ERC20Basic.sol";
 
 /**
 *   @title Contract for business logic
@@ -62,8 +63,18 @@ contract BusinessLogic is Management {
     /**
      *  @dev Function for claiming tokens if crowdsale was successful
      */
-    function claimTokens() public {
+    function claimTokens(uint256 crowdsaleId) public {
+        // Checks is crowdsale finished
+        require(crowdsaleStorage.isCrowdsaleFinished(crowdsaleId));
 
+        ERC20Basic token = ERC20Basic(crowdsaleStorage.getTokenAddressById(crowdsaleId));
+
+        // Counts how many tokens user should get
+        uint256 raised = crowdsaleStorage.getWeiRaised(crowdsaleId);
+        uint256 invested = moneyVault.getAmountOfFunds(msg.sender);
+        uint256 amount = token.balanceOf(this);
+
+        token.transfer(msg.sender, amount.div(raised).mul(amount));
     }
 
     /**
