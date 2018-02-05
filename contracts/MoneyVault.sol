@@ -40,12 +40,13 @@ contract MoneyVault is Management {
      *  @param _address Address of investor
      *  @return Amount of invested funds
      */
-    function getAmountOfFunds(address _address) constant public returns (uint256) {
+    function getAmountOfFunds(address _address) view public returns (uint256) {
         return deposited[_address];
     }
 
     /**
      *  @dev Sends all ether to crowdsale contract
+     *  Only admins can call this function
      *  @param _crowdsale Address of crowdsale
      */
     function sendEtherToCrowdsale(address _crowdsale) public onlyAdmins {
