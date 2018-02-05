@@ -2,10 +2,11 @@ pragma solidity ^0.4.18;
 
 /**
  *   @title Contract that implements logic of management.
- *   @dev Implement logic of role management
+ *   @notice Implements logic of role management
  */
 contract Management {
 
+    // Base struct for all proposals
     struct Proposal {
         address[] votes;           // Addresses which voted for this proposal
         uint256 votesNumber;        // Number of votes
@@ -13,60 +14,53 @@ contract Management {
 
     /*** STORAGE ***/
 
-    // @dev Number of admins. It cannot be less than 1 and greater than 256
+    // Number of admins. It cannot be less than 1 and greater than 256
     uint8 adminCount;
 
-    /**
-     * @dev Address of founder
-     * @dev Founder cannot be removed from admins list
-     */
+
+    // Address of founder, what cannot be removed from admins list
     address founder;
 
-    // @dev State of contract. Some operations cannot be done if contract is paused
+    // State of contract. Some operations cannot be done if contract is paused
     bool public paused = false;
 
-    // @dev A mapping for approval that address is owner
+    //  A mapping for approval that address is owner
     mapping (address => bool) ownerMapping;
 
-    // @dev A mapping where all proposals stored
+    //  A mapping where all proposals stored
     mapping (address => Proposal) proposals;
 
 
     /*** EVENTS ***/
 
-    // @dev Emits when new admin was added
+    // Emits when new admin was added
     event AdminWasAdded(address newAdmin);
 
-    // @dev Emits when admin was removed
+    // Emits when admin was removed
     event AdminWasRemoved(address removedAdmin);
 
-    // @dev Emits when contract was paused
+    // Emits when contract was paused
     event Pause();
 
-    // @dev Emits when contract was unpaused
+    // Emits when contract was unpaused
     event Unpause();
+
 
     /*** MODIFIERS ***/
 
-    /**
-     * @dev Only admins modifier
-     */
+    // @dev Requires that msg.sender is admin
     modifier onlyAdmins() {
         require(isAdmin(msg.sender));
         _;
     }
 
-    /**
-     * @dev Modifier to make a function callable only when the contract is not paused.
-     */
+    // @dev Means that function can be called only when the contract is not paused
     modifier whenNotPaused() {
         require(!paused);
         _;
     }
 
-    /**
-     * @dev Modifier to make a function callable only when the contract is paused.
-     */
+    // @dev Modifier to make a function callable only when the contract is paused.
     modifier whenPaused() {
         require(paused);
         _;
@@ -76,8 +70,8 @@ contract Management {
     /*** FUNCTIONS ***/
 
     /**
-     * @dev Default constructor for Management contract
-     * mgs.sender will be assigned as first admin
+     * @notice Default constructor for Management contract
+     * @dev msg.sender will be assigned as first admin
      * Constructor rejects incoming ether. The payable flag is added for access
      * to msg.value without warning
      */
@@ -89,13 +83,12 @@ contract Management {
     }
 
     /**
-     *   @dev Adds new admin. Can be called only by existing admin
-     *   @param newAdmin             Address of new admin
-     *   If function calls first time, it creates proposal of adding new admin
+     *   @notice Adds new admin
+     *   @dev If function calls first time, it creates proposal of adding new admin
      *   If function calls multiple times with the same newAdmin param, it votes for
-     *   newAdmin adding. If number of votes for one admin is more than 2, it executes and
+     *   newAdmin adding. If number of votes for one admin is 2 or more, it executes and
      *   adding new admin.
-     *   Only second admin adds without creating proposal
+     *   @param newAdmin             Address of new admin
      */
     function addAdmin(address newAdmin) onlyAdmins public {
         // Require that number of admins is less than 256
@@ -109,11 +102,11 @@ contract Management {
         if (adminCount == 1) {
             ownerMapping[newAdmin] = true;
             adminCount++;
-
+            // Emits AdminWasAdded event
             AdminWasAdded(newAdmin);
         } else {
             // Checks if there enough votes
-            if (proposals[newAdmin].votesNumber > 2) {
+            if (proposals[newAdmin].votesNumber >= 2) {
                 // Adds new admin
                 ownerMapping[newAdmin] = true;
                 adminCount++;
@@ -142,16 +135,18 @@ contract Management {
         require(adminAddress != founder);
         // Require that address exists
         require(isAdmin(adminAddress));
-
+        // Removes admin from mapping
         delete ownerMapping[adminAddress];
+        // Decrements amount of admins;
         adminCount--;
-
+        // Emits AdminWasRemoved event
         AdminWasRemoved(adminAddress);
     }
 
     /**
-    *   @dev Checks that the address is an administrator
+    *   @notice Checks that the address is an administrator
     *   @param _address             Address of possible admin
+    *   @return true if address is admin
     **/
     function isAdmin(address _address) public view returns (bool) {
         return ownerMapping[_address];
@@ -181,14 +176,18 @@ contract Management {
     }
 
     /**
-     *  @dev Checks if address already voted for proposal
+     *  @notice Checks if address already voted for proposal
+     *  @dev Iterates through proposals array and checks if admin already voted
      *  @param _address             Address of admin
      *  @param _voteFor             Address in proposal
      */
     function isAlreadyVoted(address _address, address _voteFor) view internal returns (bool) {
+        // Iterates through proposals array
         for (uint8 i = 0; i < proposals[_voteFor].votes.length - 1; i++) {
+            // If admin already voted returns true
             if (proposals[_voteFor].votes[i] == _address) return true;
         }
+        // If admin didn't vote returns false
         return false;
     }
 }
