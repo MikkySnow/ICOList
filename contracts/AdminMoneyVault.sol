@@ -2,41 +2,39 @@ pragma solidity ^0.4.0;
 
 import "./Management.sol";
 
-
 /**
- *   @title Vault for admins funds
+ *   @title A vault for admins funds
+ *   @notice Only admins can use this contract
  */
 contract AdminMoneyVault is Management {
 
-    // @dev Emits when somebody withdraws money from contract
+    // Emits when somebody withdraws money from contract
     event MoneyWithdrawal(uint256 _amount, address _address);
 
-    /**
-     *  Number of admins which signed withdraw proposal
-     */
+    //  Number of admins which signed withdraw proposal
     uint8 numberOfSigns;
 
-    /**
-     *  An array for signedAddresses
-     */
+    //  An array for signedAddresses
     address[] signedAdmins;
 
     /**
-    *   @dev Function for money withdrawal
-    *   Can be called only by 2 or more admins
+    *   @notice Function for money withdrawal
+    *   @dev Can be called only by 2 or more admins
     *   @param _address         Address to withdraw
     *   @param _amount          Amount to withdraw
     **/
     function withdraw(address _address, uint256 _amount) internal {
+        // Checks if contract balance greater than withdrawal amount
         require(this.balance >= _amount);
+        // Transfers ether to _address
         _address.transfer(_amount);
-
+        // Emits withdrawal event
         MoneyWithdrawal(_amount, _address);
     }
 
     /**
-     *  @dev Accepts money withdrawal
-     *  Money withdrawal starts when at least 3 admins signed
+     *  @notice Accepts money withdrawal
+     *  @dev Money withdrawal starts when at least 3 admins signed
      *  @param _address         Address to withdraw
      *  @param _amount          Amount to withdraw
      */
@@ -69,7 +67,8 @@ contract AdminMoneyVault is Management {
     }
 
     /**
-     *  @dev Decline money withdrawal
+     *  @notice Decline money withdrawal
+     *  @dev Declines money withdrawal by decrementing votes for withdrawal proposal
      */
     function declineWithdrawal() onlyAdmins public {
         // One person can't vote twice
@@ -92,7 +91,9 @@ contract AdminMoneyVault is Management {
     }
 
     /**
-     *  @dev Clears list of signed admins
+     *  @notice Clears list of signed admins
+     *  @dev Could be a leak of gas, but length of signedAdmins array
+     *  cannot be greater than 5
      */
     function clearSignedAdminsList() internal {
         for (uint8 i=0; i<signedAdmins.length-1; i++) {
@@ -100,21 +101,29 @@ contract AdminMoneyVault is Management {
         }
     }
 
-    // @dev Overriden function for accepting ether directly
-    function () payable {
+    /**
+     *  @notice Accepts incoming ether directly
+     *  @dev Overridden function for accepting ether directly
+     */
+    function () public payable {
     }
 
     /**
-         *  @dev Checks if address already signed proposal
-         */
+     *  @notice Checks if address already signed proposal
+     *  @dev Iterating through signedAdmins array and compares addresses stored there
+     *  with _address
+     *  @return true if admin already signed proposal
+     */
     function isSigned(address _address) internal view returns (bool) {
-
+        // Iteration through signedAdmins array
         for (uint8 i=0; i<signedAdmins.length-1; i++) {
+            // Checks if admin already signed proposal
             if (_address == signedAdmins[i]) {
+                // If signed return true
                 return true;
             }
         }
-
+        // If not return false
         return false;
     }
 }
