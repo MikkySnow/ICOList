@@ -148,7 +148,7 @@ contract Management {
     *   @param _address             Address of possible admin
     *   @return true if address is admin
     **/
-    function isAdmin(address _address) public view returns (bool isAdmin) {
+    function isAdmin(address _address) public view returns (bool isAdminAddress) {
         return ownerMapping[_address];
     }
 
