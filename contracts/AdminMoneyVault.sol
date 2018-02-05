@@ -114,7 +114,7 @@ contract AdminMoneyVault is Management {
      *  with _address
      *  @return true if admin already signed proposal
      */
-    function isSigned(address _address) internal view returns (bool) {
+    function isSigned(address _address) internal view returns (bool isSigned) {
         // Iteration through signedAdmins array
         for (uint8 i=0; i<signedAdmins.length-1; i++) {
             // Checks if admin already signed proposal

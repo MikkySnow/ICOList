@@ -122,8 +122,9 @@ contract CrowdsaleStorage is Management {
 
     /**
      *  @dev Returns token address of active crowdsale
+     *  @return token address
      */
-    function getCrowdsaleToken() public view returns (address) {
+    function getCrowdsaleToken() public view returns (address tokenAddress) {
         return crowdsales[activeCrowdsaleId].tokenAddress;
     }
 
@@ -131,7 +132,7 @@ contract CrowdsaleStorage is Management {
      *  @dev Returns crowdsale address of active crowdsale
      *  @return Crowdsale address
      */
-    function getCrowdsaleAddress() public view returns (address) {
+    function getCrowdsaleAddress() public view returns (address crowdsaleAddress) {
         return crowdsales[activeCrowdsaleId].crowdsaleAddress;
     }
 
@@ -140,7 +141,7 @@ contract CrowdsaleStorage is Management {
      *  @param _crowdsaleId            Crowdsale ID
      *  @return address of crowdsale
      */
-    function getCrowdsaleAddressById(uint256 _crowdsaleId) public view returns (address) {
+    function getCrowdsaleAddressById(uint256 _crowdsaleId) public view returns (address crowdsaleAddress) {
         return crowdsales[_crowdsaleId].crowdsaleAddress;
     }
 
@@ -149,7 +150,7 @@ contract CrowdsaleStorage is Management {
      *  @param _crowdsaleId            Crowdsale ID
      *  @return address of crowdsale token
      */
-    function getTokenAddressById(uint256 _crowdsaleId) public view returns (address) {
+    function getTokenAddressById(uint256 _crowdsaleId) public view returns (address tokenAddress) {
         return crowdsales[_crowdsaleId].tokenAddress;
     }
 
@@ -158,7 +159,7 @@ contract CrowdsaleStorage is Management {
      *  @param _crowdsaleId            Crowdsale ID
      *  @return true if crowdsale finished, false if crowdsale is waiting or active
      */
-    function isCrowdsaleFinished(uint256 _crowdsaleId) public view returns (bool) {
+    function isCrowdsaleFinished(uint256 _crowdsaleId) public view returns (bool isFinished) {
         return crowdsales[_crowdsaleId].status == CrowdsaleStatus.Ended;
     }
 
@@ -167,7 +168,7 @@ contract CrowdsaleStorage is Management {
      *  @param  _crowdsaleId            Crowdsale ID
      *  @return Amount of wei
      */
-    function getWeiRaised(uint256 _crowdsaleId) public view returns (uint256) {
+    function getWeiRaised(uint256 _crowdsaleId) public view returns (uint256 weiRaised) {
         return crowdsales[_crowdsaleId].weiRaised;
     }
 }

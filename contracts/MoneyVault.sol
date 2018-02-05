@@ -40,7 +40,7 @@ contract MoneyVault is Management {
      *  @param _address Address of investor
      *  @return Amount of invested funds
      */
-    function getAmountOfFunds(address _address) view public returns (uint256) {
+    function getAmountOfFunds(address _address) view public returns (uint256 amount) {
         return deposited[_address];
     }
 

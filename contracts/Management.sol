@@ -148,7 +148,7 @@ contract Management {
     *   @param _address             Address of possible admin
     *   @return true if address is admin
     **/
-    function isAdmin(address _address) public view returns (bool) {
+    function isAdmin(address _address) public view returns (bool isAdmin) {
         return ownerMapping[_address];
     }
 
@@ -180,8 +180,9 @@ contract Management {
      *  @dev Iterates through proposals array and checks if admin already voted
      *  @param _address             Address of admin
      *  @param _voteFor             Address in proposal
+     *  @return true if msg.sender already voted
      */
-    function isAlreadyVoted(address _address, address _voteFor) view internal returns (bool) {
+    function isAlreadyVoted(address _address, address _voteFor) view internal returns (bool isVoted) {
         // Iterates through proposals array
         for (uint8 i = 0; i < proposals[_voteFor].votes.length - 1; i++) {
             // If admin already voted returns true
