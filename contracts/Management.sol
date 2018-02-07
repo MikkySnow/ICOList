@@ -98,4 +98,9 @@ contract Management {
         // If admin didn't vote returns false
         return false;
     }
+
+    // Transfers ownership of contract to new Ownership contract
+    function transferOwnership(address _address) onlyAdmins {
+        ownershipContract = _address;
+    }
 }
