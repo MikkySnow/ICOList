@@ -2,7 +2,7 @@ pragma solidity ^0.4.18;
 
 import "./ERC20Token.sol";
 
-contract Crowdsale {
+contract ERC20Crowdsale {
     address public beneficiary;
     uint public fundingGoal;
     uint public amountRaised;
@@ -32,7 +32,7 @@ contract Crowdsale {
         fundingGoal = fundingGoalInEthers * 1 ether;
         deadline = now + durationInMinutes * 1 minutes;
         price = etherCostOfEachToken * 1 ether;
-        tokenReward = token(addressOfTokenUsedAsReward);
+        tokenReward = ERC20Token(addressOfTokenUsedAsReward);
     }
 
     /**
