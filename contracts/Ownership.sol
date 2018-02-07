@@ -12,6 +12,9 @@ contract Ownership {
     //  A mapping for approval that address is owner
     mapping (address => bool) ownerMapping;
 
+    //  A mapping where all proposals stored
+    mapping (address => Proposal) proposals;
+
     // @dev Base struct for all proposals
     // @param votes Array where stored all addresses of signed participants
     // @param votesNumber How much participants was voted
@@ -30,6 +33,12 @@ contract Ownership {
         ownerMapping[msg.sender] = true;
         founder = msg.sender;
         adminCount = 1;
+    }
+
+    // @dev Requires that msg.sender is admin
+    modifier onlyAdmins() {
+        require(isAdmin(msg.sender));
+        _;
     }
 
     /**
