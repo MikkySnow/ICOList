@@ -25,14 +25,13 @@ contract ERC20Crowdsale {
         address ifSuccessfulSendTo,
         uint fundingGoalInEthers,
         uint durationInMinutes,
-        uint etherCostOfEachToken,
-        address addressOfTokenUsedAsReward
+        uint etherCostOfEachToken
     ) {
         beneficiary = ifSuccessfulSendTo;
         fundingGoal = fundingGoalInEthers * 1 ether;
         deadline = now + durationInMinutes * 1 minutes;
         price = etherCostOfEachToken * 1 ether;
-        tokenReward = ERC20Token(addressOfTokenUsedAsReward);
+        tokenReward = new ERC20Token(10000, "Hello", "THT");
     }
 
     /**

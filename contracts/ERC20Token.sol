@@ -25,7 +25,7 @@ contract ERC20Token {
      *
      * Initializes contract with initial supply tokens to the creator of the contract
      */
-    function TokenERC20(
+    function ERC20Token (
         uint256 initialSupply,
         string tokenName,
         string tokenSymbol
