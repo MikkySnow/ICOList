@@ -49,6 +49,11 @@ contract CrowdsaleStorage is Management {
 
     /*** FUNCTIONS ***/
 
+
+    function CrowdsaleStrorage(address _address) Management(_address) {
+        require(_address != 0x0);
+    }
+
     /**
     *   @dev Adds crowdsale info to storage.
     *   @dev Calls internal by Crowdsale fabric contract

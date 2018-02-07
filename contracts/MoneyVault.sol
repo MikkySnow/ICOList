@@ -18,6 +18,10 @@ contract MoneyVault is Management {
     // A mapping for save amount that was invested by address
     mapping (address => uint256) deposited;
 
+    function MoneyVault(address _address) Management(_address) {
+        require(_address != 0x0);
+    }
+
     // @dev Function for claiming our ether back
     function claimRefunds() public {
         uint256 amount = deposited[msg.sender];

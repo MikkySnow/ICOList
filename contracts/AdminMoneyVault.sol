@@ -35,6 +35,10 @@ contract AdminMoneyVault is Management {
         MoneyWithdrawal(_amount, _address);
     }
 
+    function BusinessLogic(address _address) Management(_address) {
+        require(_address != 0x0);
+    }
+
     /**
      *  @dev Accepts money withdrawal
      *  @dev Money withdrawal starts when at least 3 admins signed

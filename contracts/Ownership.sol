@@ -1,137 +1,111 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.18;
 
-
+// @title Contract for role management
 contract Ownership {
 
-    // @dev Number of admins. It cannot be less than 1 and greater than 256
-    uint8 adminCount;
+    /*** EVENTS ***/
 
-    // @dev Address of founder, what cannot be removed from admins list
-    address founder;
+    // @dev Event emits when new CFO was added
+    // @param newCFO Address of new CFO
+    event CFOAdded(address newCFO);
 
-    //  A mapping for approval that address is owner
-    mapping (address => bool) ownerMapping;
-
-    //  A mapping where all proposals stored
-    mapping (address => Proposal) proposals;
-
-    // @dev Base struct for all proposals
-    // @param votes Array where stored all addresses of signed participants
-    // @param votesNumber How much participants was voted
-    struct Proposal {
-        address[] votes;
-        uint256 votesNumber;
-    }
-
-    // Emits when new admin was added
+    // @dev Event emits when new admin was added
+    // @param newAdmin Address of new admin
     event AdminWasAdded(address newAdmin);
 
-    // Emits when admin was removed
-    event AdminWasRemoved(address removedAdmin);
+    // @dev Event emits when CFO was deleted
+    // @param newAdmin Address of CFO
+    event CFOWasDeleted(address CFOAddress);
 
-    function Ownership(){
-        ownerMapping[msg.sender] = true;
-        founder = msg.sender;
-        adminCount = 1;
-    }
+    // @dev Event emits when admin was deleted
+    // @param newAdmin Address of admin
+    event AdminWasDeleted(address adminAddress);
 
-    // @dev Requires that msg.sender is admin
-    modifier onlyAdmins() {
-        require(isAdmin(msg.sender));
+    /*** VARIABLES ***/
+
+    // @dev Number of admins. It cannot be less than 1 and greater than 256
+    uint8 internal adminCount;
+
+    // @dev Address of founder, who cannot be removed from admins list
+    address internal CEO;
+
+    // @dev Address of CFO, who can withdraw money from contract
+    address internal CFO;
+
+    /*** MODIFIERS ***/
+
+    // @dev Mapping for approwal of adminship
+    mapping(address => bool) internal isAdmin;
+
+    // @dev Modifier for actions, which can do only CEO
+    modifier onlyCEO() {
+        require(msg.sender == CEO);
         _;
     }
 
-    /**
-     *   @dev Adds new admin
-     *   @dev If function calls first time, it creates proposal of adding new admin
-     *   If function calls multiple times with the same newAdmin param, it votes for
-     *   newAdmin adding. If number of votes for one admin is 2 or more, it executes and
-     *   adding new admin.
-     *   @param newAdmin             Address of new admin
-     */
-    function addAdmin(address newAdmin) onlyAdmins public {
-        // Require that number of admins is less than 256
+    // @dev Modifier for actions, which can do only CFO
+    modifier onlyCFO() {
+        require(msg.sender == CFO);
+        _;
+    }
+
+    // @dev Modifier for actions, which can do only admins
+    modifier onlyAdmins() {
+        require(isAdmin[msg.sender]);
+        _;
+    }
+
+    /*** FUNCTIONS ***/
+
+    // @dev Default constructor for Ownership contract
+    function Ownership() public {
+        isAdmin[msg.sender] = true;
+        CEO = msg.sender;
+        adminCount = 1;
+    }
+
+    // @dev Sets address of CFO
+    // @param CFOAddress Address of new CFO
+    function setCFO(address CFOAddress) onlyCEO public {
+        require(CFOAddress != 0x0);
+        require(CFO == 0x0);
         require(adminCount < 5);
-        // Require that address is not zero
-        require(newAdmin != 0x0);
-        // Require that it's new admin
-        require(!isAdmin(newAdmin));
-
-        // If we creating the second admin, it can be added without proposal
-        if (adminCount == 1) {
-            ownerMapping[newAdmin] = true;
-            adminCount++;
-            // Emits AdminWasAdded event
-            AdminWasAdded(newAdmin);
-        } else {
-            // Checks if there enough votes
-            if (proposals[newAdmin].votesNumber >= 2) {
-                // Adds new admin
-                ownerMapping[newAdmin] = true;
-                adminCount++;
-                // Remove proposal
-                delete proposals[newAdmin];
-                // If there not enough votes for adding, votes for chosen admin
-            } else {
-                // Checks if admin already voted
-                if (!isAlreadyVoted(msg.sender, newAdmin)) {
-                    proposals[newAdmin].votesNumber++;
-                    proposals[newAdmin].votes.push(msg.sender);
-                }
-            }
-        }
+        require(!isAdmin[CFOAddress]);
+        isAdmin[CFOAddress] = true;
+        CFO = CFOAddress;
+        adminCount++;
     }
 
-    /**
-     *   @dev Removes admin. Can be called only by multiple admins
-     *   @dev If admins count less than 3 it can be called by 1 admin
-     *   @param adminAddress         Address of existing admin
-     */
-    function removeAdmin(address adminAddress) onlyAdmins public {
-        // Require that number of admins is more than one
-        require(adminCount > 1);
-        // Require that address is not founder
-        require(adminAddress != founder);
-        // Require that address exists
-        require(isAdmin(adminAddress));
-        // Removes admin from mapping
-        delete ownerMapping[adminAddress];
-        // Decrements amount of admins;
+    // @dev Sets address of new admin
+    // @param adminAddress Address of new admin
+    function setAdmin(address adminAddress) onlyCEO public {
+        require(adminAddress != 0x0);
+        require(adminCount < 5);
+        require(!isAdmin[adminAddress]);
+        isAdmin[adminAddress] = true;
+        adminCount++;
+    }
+
+    // @dev Removes CFO
+    // @param CFOAddress Address of existing CFO
+    function removeCFO(address CFOAddress) onlyCEO public {
+        require(CFO == CFOAddress);
         adminCount--;
-        // Emits AdminWasRemoved event
-        AdminWasRemoved(adminAddress);
+        delete isAdmin[CFOAddress];
+        CFO = 0x0;
     }
 
-    /**
-    *   @dev Checks that the address is an administrator
-    *   @param _address             Address of possible admin
-    *   @return true if address is admin
-    **/
-    function isAdmin(address _address) public view returns (bool isAdminAddress) {
-        return ownerMapping[_address];
+    // @dev Removes admin
+    // @param adminAddress Addres of existing admin
+    function removeAdmin(address adminAddress) onlyAdmins public {
+        require(isAdmin[adminAddress]);
+        require(adminAddress != CEO && adminAddress != CFO);
+        delete isAdmin[adminAddress];
+        adminCount--;
     }
 
-    /**
-     * @dev Disallows sending ether
-     */
+    // @dev Disallows sending ether
     function () public payable {
         require(msg.value == 0);
-    }
-
-    /**
-     *  @dev Checks if address already voted for proposal
-     *  @dev Iterates through proposals array and checks if admin already voted
-     *  @param _address             Address of admin
-     *  @param _voteFor             Address in proposal
-     *  @return true if msg.sender already voted
-     */
-    function isAlreadyVoted(address _address, address _voteFor) view internal returns (bool isVoted) {
-        // Iterates through proposals array
-        for (uint8 i = 0; i < proposals[_voteFor].votes.length - 1; i++) {
-            // If admin already voted returns true
-            if (proposals[_voteFor].votes[i] == _address) return true;
-        }
-        // If admin didn't vote returns false
-        return false;
     }
 }

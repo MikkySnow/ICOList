@@ -45,6 +45,10 @@ contract BusinessLogic is Management {
 
     /*** FUNCTIONS ***/
 
+    function BusinessLogic(address _address) Management(_address) {
+        require(_address != 0x0);
+    }
+
     /**
     *   @dev Function for crowdsale contributing by users
     *   Contributing of crowdsale takes some fees.
