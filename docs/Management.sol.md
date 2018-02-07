@@ -13,7 +13,7 @@
 
 # Management
 
-### Contract that implements logic of management.
+### Implements logic of role management
 
 
 
@@ -60,7 +60,7 @@ If function calls multiple times with the same newAdmin param, it votes fornewAd
 
 #### isAdmin
 
-
+Checks that the address is an administrator
 
 
 ##### Inputs

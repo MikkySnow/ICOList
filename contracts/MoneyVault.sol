@@ -5,8 +5,8 @@ import "./Management.sol";
 
 /**
  * @title Contract where user ether stored
- * @notice Business logic stores users ether here
- * and admins can only contribute crowdsales by this ether
+ * @dev Business logic stores users ether here
+ * @dev and admins can only contribute crowdsales by this ether
  */
 contract MoneyVault is Management {
 

@@ -13,7 +13,7 @@
 
 # CrowdsaleStorage
 
-### Storage contract for crowdsales.
+### There stored data of all crowdsales.
 
 By using storage we divide business logic and storage.In case of any bugs or exploits we can redeploy our contract for logic and keep data safe.Storage implement only create and retrieve functions
 
@@ -117,7 +117,7 @@ Returns crowdsale token address by its id
 
 #### getWeiRaised
 
-
+Returns how much wei raised by MoneyVault
 
 
 ##### Inputs
@@ -129,7 +129,7 @@ Returns crowdsale token address by its id
 
 #### isAdmin
 
-
+Checks that the address is an administrator
 
 
 ##### Inputs
@@ -141,7 +141,7 @@ Returns crowdsale token address by its id
 
 #### isCrowdsaleFinished
 
-
+Returns status of crowdsale
 
 
 ##### Inputs

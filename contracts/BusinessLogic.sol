@@ -8,7 +8,7 @@ import "zeppelin-solidity/contracts/token/ERC20/ERC20Basic.sol";
 
 /**
 *   @title Contract for business logic
-*   @notice There implemented all business logic.
+*   @dev There implemented all business logic.
 *   All users interaction works via this contract
 */
 contract BusinessLogic is Management {
@@ -46,7 +46,7 @@ contract BusinessLogic is Management {
     /*** FUNCTIONS ***/
 
     /**
-    *   @notice Function for crowdsale contributing by users
+    *   @dev Function for crowdsale contributing by users
     *   Contributing of crowdsale takes some fees.
     *   @dev User ether sends to MoneyVault contract, admin fees
     *   sends to AdminMoneyVault contract
@@ -63,7 +63,7 @@ contract BusinessLogic is Management {
     }
 
     /**
-     *  @notice Function for claiming tokens if crowdsale was successful
+     *  @dev Function for claiming tokens if crowdsale was successful
      *  @dev Function connects to token contract and gets how much tokens contract
      *  bought by calling balanceOf(this). After that we count how much tokens
      *  we should send to user according to the amount he invested. Tokens will be sent by
@@ -85,7 +85,7 @@ contract BusinessLogic is Management {
     }
 
     /**
-     *   @notice Function for accepting ether coming directly to contract
+     *   @dev Function for accepting ether coming directly to contract
      *   @dev Overrides disallowing function to receive ether. To
      *   implement logic of contributing calls contribute()
      */
@@ -94,7 +94,7 @@ contract BusinessLogic is Management {
     }
 
     /**
-     *  @notice Sets MoneyVault contract address
+     *  @dev Sets MoneyVault contract address
      *  @dev Can be called when contract is paused only by 2 or more admins
      *  if adminCount more than 1 and by 1 admin if adminCount is 1.
      *  @param _address         New address of MoneyVault contract
@@ -130,7 +130,7 @@ contract BusinessLogic is Management {
     }
 
     /**
-     *  @notice Sets CrowdsaleStorage contract address
+     *  @dev Sets CrowdsaleStorage contract address
      *  @dev Can be called when contract is paused only by 2 or more admins
      *  if adminCount more than 1 and by 1 admin if adminCount is 1.
      *  @param _address         New address of CrowdsaleStorage contract
@@ -166,7 +166,7 @@ contract BusinessLogic is Management {
     }
 
     /**
-     *  @notice Sets AdminMoneyVault contract address
+     *  @dev Sets AdminMoneyVault contract address
      *  @dev Can be called when contract is paused only by 2 or more admins
      *  if adminCount more than 1 and by 1 admin if adminCount is 1.
      *  @param _address         New address of AdminMoneyVault contract

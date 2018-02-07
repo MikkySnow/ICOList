@@ -13,7 +13,7 @@
 
 # BusinessLogic
 
-### Contract for business logic
+### There implemented all business logic.
 
 All users interaction works via this contract
 
@@ -99,7 +99,7 @@ empty list
 
 #### isAdmin
 
-
+Checks that the address is an administrator
 
 
 ##### Inputs

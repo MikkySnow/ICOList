@@ -4,7 +4,7 @@ import "./Management.sol";
 
 /**
 *   @title Storage contract for crowdsales.
-*   @notice There stored data of all crowdsales.
+*   @dev There stored data of all crowdsales.
 *   By using storage we divide business logic and storage.
 *   In case of any bugs or exploits we can redeploy our contract for logic and keep data safe.
 *   Storage implement only create and retrieve functions
@@ -50,7 +50,7 @@ contract CrowdsaleStorage is Management {
     /*** FUNCTIONS ***/
 
     /**
-    *   @notice Adds crowdsale info to storage.
+    *   @dev Adds crowdsale info to storage.
     *   @dev Calls internal by Crowdsale fabric contract
     *   in createCrowdsale() function
     *   @param _crowdsaleAddress            address of crowdsale contract
@@ -71,7 +71,7 @@ contract CrowdsaleStorage is Management {
     }
 
     /**
-     *  @notice Sets token address for chosen crowdsale
+     *  @dev Sets token address for chosen crowdsale
      *  @dev Can be called only by admins
      *  @param _crowdsaleId   ID of chosen crowdsale
      */
@@ -80,7 +80,7 @@ contract CrowdsaleStorage is Management {
     }
 
     /**
-    *   @notice Sets crowdsale status to active
+    *   @dev Sets crowdsale status to active
     *   @dev Uses internally by admin contract. Only admins can set it active
     *   @param _crowdsaleId         id of chosen crowdsale
     **/
@@ -155,7 +155,7 @@ contract CrowdsaleStorage is Management {
     }
 
     /**
-     *  @notice Returns status of crowdsale
+     *  @dev Returns status of crowdsale
      *  @param _crowdsaleId            Crowdsale ID
      *  @return true if crowdsale finished, false if crowdsale is waiting or active
      */
@@ -164,7 +164,7 @@ contract CrowdsaleStorage is Management {
     }
 
     /**
-     *  @notice Returns how much wei raised by MoneyVault
+     *  @dev Returns how much wei raised by MoneyVault
      *  @param  _crowdsaleId            Crowdsale ID
      *  @return Amount of wei
      */

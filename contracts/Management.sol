@@ -2,23 +2,25 @@ pragma solidity ^0.4.18;
 
 /**
  *   @title Contract that implements logic of management.
- *   @notice Implements logic of role management
+ *   @dev Implements logic of role management
  */
 contract Management {
 
-    // Base struct for all proposals
+    // @dev Base struct for all proposals
+    // @param votes Array where stored all addresses of signed participants
+    // @param votesNumber How much participants was voted
     struct Proposal {
-        address[] votes;           // Addresses which voted for this proposal
-        uint256 votesNumber;        // Number of votes
+        address[] votes;           // @dev Addresses which voted for this proposal
+        uint256 votesNumber;        // @dev Number of votes
     }
 
     /*** STORAGE ***/
 
-    // Number of admins. It cannot be less than 1 and greater than 256
+    // @dev Number of admins. It cannot be less than 1 and greater than 256
     uint8 adminCount;
 
 
-    // Address of founder, what cannot be removed from admins list
+    // @dev Address of founder, what cannot be removed from admins list
     address founder;
 
     // State of contract. Some operations cannot be done if contract is paused
@@ -70,7 +72,7 @@ contract Management {
     /*** FUNCTIONS ***/
 
     /**
-     * @notice Default constructor for Management contract
+     * @dev Default constructor for Management contract
      * @dev msg.sender will be assigned as first admin
      * Constructor rejects incoming ether. The payable flag is added for access
      * to msg.value without warning
@@ -83,7 +85,7 @@ contract Management {
     }
 
     /**
-     *   @notice Adds new admin
+     *   @dev Adds new admin
      *   @dev If function calls first time, it creates proposal of adding new admin
      *   If function calls multiple times with the same newAdmin param, it votes for
      *   newAdmin adding. If number of votes for one admin is 2 or more, it executes and
@@ -144,7 +146,7 @@ contract Management {
     }
 
     /**
-    *   @notice Checks that the address is an administrator
+    *   @dev Checks that the address is an administrator
     *   @param _address             Address of possible admin
     *   @return true if address is admin
     **/
@@ -176,7 +178,7 @@ contract Management {
     }
 
     /**
-     *  @notice Checks if address already voted for proposal
+     *  @dev Checks if address already voted for proposal
      *  @dev Iterates through proposals array and checks if admin already voted
      *  @param _address             Address of admin
      *  @param _voteFor             Address in proposal

@@ -13,9 +13,9 @@
 
 # MoneyVault
 
-### Contract where user ether stored
+### and admins can only contribute crowdsales by this ether
 
-nd admins can only contribute crowdsales by this ether
+
 
 ## Functions
 
@@ -95,7 +95,7 @@ Returns amount of stored funds by chosen address
 
 #### isAdmin
 
-
+Checks that the address is an administrator
 
 
 ##### Inputs

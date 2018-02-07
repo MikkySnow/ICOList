@@ -13,9 +13,9 @@
 
 # AdminMoneyVault
 
-### A vault for admins funds
+### There stored all admins ether,
 
-
+earned by taking fees. Only admins can use this contract
 
 ## Functions
 
@@ -83,7 +83,7 @@ empty list
 
 #### isAdmin
 
-
+Checks that the address is an administrator
 
 
 ##### Inputs

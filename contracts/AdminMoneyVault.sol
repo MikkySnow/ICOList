@@ -4,21 +4,24 @@ import "./Management.sol";
 
 /**
  *   @title A vault for admins funds
- *   @notice Only admins can use this contract
+ *   @dev There stored all admins ether,
+ *   earned by taking fees. Only admins can use this contract
  */
 contract AdminMoneyVault is Management {
 
-    // Emits when somebody withdraws money from contract
+    // @dev Event emits when somebody withdraws money from contract
+    // @param _amount How much wei was sent
+    // @param _address To what address wei was sent
     event MoneyWithdrawal(uint256 _amount, address _address);
 
-    //  Number of admins which signed withdraw proposal
+    // @dev Number of admins which signed withdraw proposal
     uint8 numberOfSigns;
 
-    //  An array for signedAddresses
+    // @dev An array for signedAddresses
     address[] signedAdmins;
 
     /**
-    *   @notice Function for money withdrawal
+    *   @dev Function for money withdrawal
     *   @dev Can be called only by 2 or more admins
     *   @param _address         Address to withdraw
     *   @param _amount          Amount to withdraw
@@ -33,7 +36,7 @@ contract AdminMoneyVault is Management {
     }
 
     /**
-     *  @notice Accepts money withdrawal
+     *  @dev Accepts money withdrawal
      *  @dev Money withdrawal starts when at least 3 admins signed
      *  @param _address         Address to withdraw
      *  @param _amount          Amount to withdraw
@@ -67,7 +70,7 @@ contract AdminMoneyVault is Management {
     }
 
     /**
-     *  @notice Decline money withdrawal
+     *  @dev Decline money withdrawal
      *  @dev Declines money withdrawal by decrementing votes for withdrawal proposal
      */
     function declineWithdrawal() onlyAdmins public {
@@ -91,7 +94,7 @@ contract AdminMoneyVault is Management {
     }
 
     /**
-     *  @notice Clears list of signed admins
+     *  @dev Clears list of signed admins
      *  @dev Could be a leak of gas, but length of signedAdmins array
      *  cannot be greater than 5
      */
@@ -102,14 +105,14 @@ contract AdminMoneyVault is Management {
     }
 
     /**
-     *  @notice Accepts incoming ether directly
+     *  @dev Accepts incoming ether directly
      *  @dev Overridden function for accepting ether directly
      */
     function () public payable {
     }
 
     /**
-     *  @notice Checks if address already signed proposal
+     *  @dev Checks if address already signed proposal
      *  @dev Iterating through signedAdmins array and compares addresses stored there
      *  with _address
      *  @return true if admin already signed proposal
