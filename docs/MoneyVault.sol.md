@@ -15,7 +15,7 @@
 
 ### Contract where user ether stored
 
-and admins can only contribute crowdsales by this ether
+nd admins can only contribute crowdsales by this ether
 
 ## Functions
 
