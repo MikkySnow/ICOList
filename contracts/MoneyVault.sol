@@ -1,6 +1,5 @@
 pragma solidity ^0.4.18;
 
-import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "./Management.sol";
 
 /**
@@ -13,12 +12,10 @@ contract MoneyVault is Management {
     // Emits when somebody want to claim refunds
     event Refunded(address _address, uint256 _amount);
 
-    using SafeMath for uint256;
-
     // A mapping for save amount that was invested by address
     mapping (address => uint256) deposited;
 
-    function MoneyVault(address _address) Management(_address) {
+    function MoneyVault(address _address) public Management(_address) {
         require(_address != 0x0);
     }
 
@@ -36,7 +33,7 @@ contract MoneyVault is Management {
      *  @param _amount  Amount which address sent to this contract
      */
     function deposit(address _to, uint256 _amount) external {
-        deposited[_to] = deposited[_to].add(_amount);
+        deposited[_to] = deposited[_to] + _amount;
     }
 
     /**
@@ -55,5 +52,9 @@ contract MoneyVault is Management {
      */
     function sendEtherToCrowdsale(address _crowdsale) public onlyAdmins {
         _crowdsale.transfer(this.balance);
+    }
+    
+    function () payable public {
+
     }
 }

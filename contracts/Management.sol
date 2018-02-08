@@ -5,20 +5,11 @@ pragma solidity ^0.4.18;
  *   @dev Implements logic of role management
  */
 contract Management {
-
-    // @dev Base struct for all proposals
-    // @param votes Array where stored all addresses of signed participants
-    // @param votesNumber How much participants was voted
-    struct Proposal {
-        address[] votes;           // @dev Addresses which voted for this proposal
-        uint256 votesNumber;        // @dev Number of votes
-    }
+    
+    /*** STORAGE ***/
 
     // State of contract. Some operations cannot be done if contract is paused
     bool public paused = false;
-
-    //  A mapping where all proposals stored
-    mapping (address => Proposal) proposals;
 
     // Address of ownership contract
     address ownershipContract;
@@ -82,25 +73,8 @@ contract Management {
         Unpause();
     }
 
-    /**
-     *  @dev Checks if address already voted for proposal
-     *  @dev Iterates through proposals array and checks if admin already voted
-     *  @param _address             Address of admin
-     *  @param _voteFor             Address in proposal
-     *  @return true if msg.sender already voted
-     */
-    function isAlreadyVoted(address _address, address _voteFor) view public returns (bool isVoted) {
-        // Iterates through proposals array
-        for (uint8 i = 0; i < proposals[_voteFor].votes.length - 1; i++) {
-            // If admin already voted returns true
-            if (proposals[_voteFor].votes[i] == _address) return true;
-        }
-        // If admin didn't vote returns false
-        return false;
-    }
-
     // Transfers ownership of contract to new Ownership contract
-    function transferOwnership(address _address) onlyAdmins {
+    function transferOwnership(address _address) onlyAdmins public {
         ownershipContract = _address;
     }
 }

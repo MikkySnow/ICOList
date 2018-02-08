@@ -50,7 +50,7 @@ contract CrowdsaleStorage is Management {
     /*** FUNCTIONS ***/
 
 
-    function CrowdsaleStrorage(address _address) Management(_address) {
+    function CrowdsaleStorage(address _address) public Management(_address) {
         require(_address != 0x0);
     }
 
@@ -82,35 +82,6 @@ contract CrowdsaleStorage is Management {
      */
     function setCrowdsaleToken(uint256 _crowdsaleId, address _tokenAddress) onlyAdmins public {
         crowdsales[_crowdsaleId].tokenAddress = _tokenAddress;
-    }
-
-    /**
-    *   @dev Sets crowdsale status to active
-    *   @dev Uses internally by admin contract. Only admins can set it active
-    *   @param _crowdsaleId         id of chosen crowdsale
-    **/
-    function setCrowdsaleActive(uint256 _crowdsaleId) onlyAdmins public {
-        // Crowdsale cannot be active twice
-        require(crowdsales[_crowdsaleId].status != CrowdsaleStatus.Ended);
-        // Checks if crowdsale exists
-        require(crowdsales[_crowdsaleId].crowdsaleAddress != 0x0);
-
-        if (adminCount == 1) {
-            crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
-            CrowdsaleBecameActive(_crowdsaleId);
-        } else {
-            if (proposals[crowdsales[_crowdsaleId].crowdsaleAddress].votesNumber >= 2) {
-                crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
-                CrowdsaleBecameActive(_crowdsaleId);
-                delete proposals[crowdsales[_crowdsaleId].crowdsaleAddress];
-            } else {
-                // Checks if admin already voted
-                if (!isAlreadyVoted(msg.sender, crowdsales[_crowdsaleId].crowdsaleAddress)) {
-                    proposals[crowdsales[_crowdsaleId].crowdsaleAddress].votesNumber++;
-                    proposals[crowdsales[_crowdsaleId].crowdsaleAddress].votes.push(msg.sender);
-                }
-            }
-        }
     }
 
     /**
