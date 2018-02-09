@@ -7,7 +7,7 @@ import "./Management.sol";
 contract CrowdsaleStorage is Management {
 
     // @dev ID of active crowdsale
-    uint256 activeCrowdsaleId;
+    uint256 public activeCrowdsaleId;
 
     // @dev Enum for crowdsale status
     enum CrowdsaleStatus {
