@@ -1,26 +1,27 @@
 pragma solidity ^0.4.18;
 
+import "./Ownership.sol";
+
 /**
- *   @title Contract that implements logic of management.
- *   @dev Implements logic of role management
+ *   @title Contract that implements Pausable, Migratable and Ownable
  */
 contract Management {
     
     /*** STORAGE ***/
 
-    // State of contract. Some operations cannot be done if contract is paused
+    // @dev State of contract. Some operations cannot be done if contract is paused
     bool public paused = false;
 
-    // Address of ownership contract
-    address ownershipContract;
+    // @dev Address of ownership contract
+    Ownership ownershipContract;
 
 
     /*** EVENTS ***/
 
-    // Emits when contract was paused
+    // @dev Emits when contract was paused
     event Pause();
 
-    // Emits when contract was unpaused
+    // @dev Emits when contract was unpaused
     event Unpause();
 
 
@@ -28,7 +29,19 @@ contract Management {
 
     // @dev Requires that msg.sender is admin
     modifier onlyAdmins() {
-        require(msg.sender == ownershipContract);
+        require(ownershipContract.isAdminAddress(msg.sender));
+        _;
+    }
+    
+    // @dev Requires that msg.sender is CEO
+    modifier onlyCEO() {
+        require(msg.sender == ownershipContract.CEO());
+        _;
+    }
+    
+    // @dev Requires that msg.sender is CFO
+    modifier onlyCFO() {
+        require(msg.sender == ownershipContract.CFO());
         _;
     }
 
@@ -46,35 +59,30 @@ contract Management {
 
     /*** FUNCTIONS ***/
 
-    /**
-     * @dev Default constructor for Management contract
-     * @dev msg.sender will be assigned as first admin
-     * Constructor rejects incoming ether. The payable flag is added for access
-     * to msg.value without warning
-     */
+    // @dev Default constructor for Management contract
+    // @param _ownershipContract Address of Ownership contract
     function Management(address _ownershipContract) public {
         require(_ownershipContract != 0x0);
-        ownershipContract = _ownershipContract;
+        ownershipContract = Ownership(_ownershipContract);
     }
 
-    /**
-     * @dev called by the owner to pause, triggers stopped state
-     */
+    // @dev called by the owner to pause, triggers stopped state
     function pause() onlyAdmins whenNotPaused public {
         paused = true;
         Pause();
     }
 
-    /**
-     * @dev called by the owner to unpause, returns to normal state
-     */
+
+    // @dev called by the owner to unpause, returns to normal state
     function unpause() onlyAdmins whenPaused public {
         paused = false;
         Unpause();
     }
 
-    // Transfers ownership of contract to new Ownership contract
-    function transferOwnership(address _address) onlyAdmins public {
-        ownershipContract = _address;
+    // @dev Transfers ownership of contract to new Ownership contract
+    // @param _address Address of new Ownership contract
+    function transferOwnership(address _address) onlyCEO public {
+        require(_address != 0x0);
+        ownershipContract = Ownership(_address);
     }
 }
