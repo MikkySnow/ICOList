@@ -27,10 +27,10 @@ contract Ownership {
     uint8 internal adminCount;
 
     // @dev Address of founder, who cannot be removed from admins list
-    address internal CEO;
+    address public CEO;
 
     // @dev Address of CFO, who can withdraw money from contract
-    address internal CFO;
+    address public CFO;
 
     /*** MODIFIERS ***/
 
@@ -108,4 +108,11 @@ contract Ownership {
     function () public payable {
         require(msg.value == 0);
     }
+    
+    // @dev Checks if address is admin address
+    // @param adminAddress  Address of possible admin
+    // @return true if address is admin address
+    function isAdminAddress(address adminAddress) public view returns (bool) {
+        return isAdmin[adminAddress];
+    } 
 }
