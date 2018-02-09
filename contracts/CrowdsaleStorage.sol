@@ -47,6 +47,13 @@ contract CrowdsaleStorage is Management {
     // @param _address Address of Ownership contract
     function CrowdsaleStorage(address _address) public Management(_address) {
         require(_address != 0x0);
+        CrowdsaleInfo memory _crowdsale = CrowdsaleInfo({
+             crowdsaleAddress: 0x0,
+             tokenAddress: 0x0,
+             status: CrowdsaleStatus.Active
+             });
+         // Add crowdsale to crowdsales array
+         crowdsales.push(_crowdsale);
     }
 
     /**
@@ -86,6 +93,7 @@ contract CrowdsaleStorage is Management {
         // Crowdsale cannot be set Ended without being set Active
         require(crowdsales[_crowdsaleId].status != CrowdsaleStatus.Waiting);
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Ended;
+        activeCrowdsaleId = 0;
         CrowdsaleWasEnded(_crowdsaleId);
     }
     
