@@ -2,9 +2,7 @@ pragma solidity ^0.4.18;
 
 import "./Ownership.sol";
 
-/**
- *   @title Contract that implements Pausable, Migratable and Ownable
- */
+// @title Contract that implements Pausable, Migratable and Ownable
 contract Management {
     
     /*** STORAGE ***/
