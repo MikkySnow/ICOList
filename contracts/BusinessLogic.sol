@@ -2,9 +2,18 @@ pragma solidity ^0.4.19;
 
 import "./Management.sol";
 import "./CrowdsaleStorage.sol";
+import "./ERC20.sol";
 
 // @title Contract that implements all business logic of contract
 contract BusinessLogic is Management {
+    
+    // @dev Struct for crowdsale campaign
+    struct Campaign {
+        // @dev A mapping where stored amount of invested funds by every address 
+        mapping (address => uint256) invested;
+        // @dev How many wei raised crowdsale
+        uint256 weiRaised;
+    }
     
     // @dev Instance of crowdsale storage
     CrowdsaleStorage crowdsaleStorage;
@@ -15,9 +24,8 @@ contract BusinessLogic is Management {
     // @dev Amount of fees admins take
     uint8 FEE = 1;
     
-    // @dev A mapping where stored amount of invested funds by every address 
-    mapping (address => uint256) invested;
-    
+    // @dev A mapping where stored how much wei raised every crowdsale
+    mapping (uint256 => Campaign) campaigns;
     
     // @dev Default constructor for Business logic contract
     // @param _address Address of Ownership contract
@@ -42,16 +50,26 @@ contract BusinessLogic is Management {
     function contribute() public whenNotPaused payable {
         uint256 amount = msg.value * FEE / 100;
         adminMoneyVault.transfer(amount);
-        invested[msg.sender] += msg.value - amount;
-    }
-    
-    // @dev Claims invested funds
-    function claimRefunds() public {
-        msg.sender.transfer(invested[msg.sender]);
+        campaigns[crowdsaleStorage.activeCrowdsaleId()].invested[msg.sender] += msg.value - amount;
     }
     
     // @dev Sets amount of fees in percentage
     function setFee(uint8 fee) public onlyCFO {
         FEE = fee;
+    }
+    
+    // @dev Buy tokens of active crowdsale
+    function buyTokens() public onlyCFO {
+        uint256 crowdsaleId = crowdsaleStorage.activeCrowdsaleId();
+        address crowdsaleAddress = crowdsaleStorage.getCrowdsaleAddressById(crowdsaleId);
+        crowdsaleAddress.transfer(campaigns[crowdsaleId].weiRaised);
+    }
+    
+    // @ dev Claims tokens
+    function claimTokens(uint256 crowdsaleId) public {
+        // Convertes to ERC20 Interface
+        ERC20 token = ERC20(crowdsaleStorage.getTokenAddressById(crowdsaleId));
+        uint256 amount = campaigns[crowdsaleId].weiRaised / token.balanceOf(this) * campaigns[crowdsaleId].invested[msg.sender];
+        token.transfer(msg.sender, amount);
     }
 }
