@@ -3,7 +3,6 @@ import { default as contract } from 'truffle-contract';
 
 import CrowdsaleStorageArtifacts from '../build/contracts/CrowdsaleStorage.json';
 import AdminMoneyVaultArtifacts from '../build/contracts/AdminMoneyVault.json';
-import MoneyVaultArtifacts from '../build/contracts/MoneyVault.json';
 import BusinessLogicArtifacts from '../build/contracts/BusinessLogic.json';
 import ManagementArtifacts from '../build/contracts/Management.json';
 
