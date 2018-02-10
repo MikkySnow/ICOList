@@ -91,13 +91,15 @@ contract CrowdsaleStorage is Management {
     **/
     function setCrowdsaleEnded(uint256 _crowdsaleId) onlyCEO public {
         // Crowdsale cannot be set Ended without being set Active
-        require(crowdsales[_crowdsaleId].status != CrowdsaleStatus.Waiting);
+        require(crowdsales[_crowdsaleId].status == CrowdsaleStatus.Active);
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Ended;
         activeCrowdsaleId = 0;
         CrowdsaleWasEnded(_crowdsaleId);
     }
     
     function setCrowdsaleActive(uint256 _crowdsaleId) onlyCEO public {
+        require(activeCrowdsaleId = 0);
+        require(crowdsales[_crowdsaleId].status == CrowdsaleStatus.Waiting);
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
         activeCrowdsaleId = _crowdsaleId;
         CrowdsaleBecameActive(_crowdsaleId);
@@ -108,6 +110,7 @@ contract CrowdsaleStorage is Management {
      *  @return token address
      */
     function getCrowdsaleToken() public view returns (address tokenAddress) {
+        require(activeCrowdsaleId != 0);
         return crowdsales[activeCrowdsaleId].tokenAddress;
     }
 
@@ -116,6 +119,7 @@ contract CrowdsaleStorage is Management {
      *  @return Crowdsale address
      */
     function getCrowdsaleAddress() public view returns (address crowdsaleAddress) {
+        require(activeCrowdsaleId != 0);
         return crowdsales[activeCrowdsaleId].crowdsaleAddress;
     }
 
@@ -125,6 +129,7 @@ contract CrowdsaleStorage is Management {
      *  @return address of crowdsale
      */
     function getCrowdsaleAddressById(uint256 _crowdsaleId) public view returns (address crowdsaleAddress) {
+        require(_crowdsaleId != 0);
         return crowdsales[_crowdsaleId].crowdsaleAddress;
     }
 
@@ -134,6 +139,7 @@ contract CrowdsaleStorage is Management {
      *  @return address of crowdsale token
      */
     function getTokenAddressById(uint256 _crowdsaleId) public view returns (address tokenAddress) {
+        require(_crowdsaleId != 0);
         return crowdsales[_crowdsaleId].tokenAddress;
     }
 
@@ -143,6 +149,7 @@ contract CrowdsaleStorage is Management {
      *  @return true if crowdsale finished, false if crowdsale is waiting or active
      */
     function isCrowdsaleFinished(uint256 _crowdsaleId) public view returns (bool isFinished) {
+        require(_crowdsaleId != 0);
         return crowdsales[_crowdsaleId].status == CrowdsaleStatus.Ended;
     }
 }
