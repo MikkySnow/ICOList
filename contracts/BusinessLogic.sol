@@ -13,6 +13,8 @@ contract BusinessLogic is Management {
         mapping (address => uint256) invested;
         // @dev How many wei raised crowdsale
         uint256 weiRaised;
+        // @dev Is campaign finished
+        bool isFinished;
     }
     
     // @dev Instance of crowdsale storage
@@ -62,12 +64,15 @@ contract BusinessLogic is Management {
     function buyTokens() public onlyCFO {
         uint256 crowdsaleId = crowdsaleStorage.activeCrowdsaleId();
         address crowdsaleAddress = crowdsaleStorage.getCrowdsaleAddressById(crowdsaleId);
+        require(crowdsaleId != 0);
+        campaigns[crowdsaleId].weiRaised = this.balance;
         crowdsaleAddress.transfer(campaigns[crowdsaleId].weiRaised);
+        campaigns[crowdsaleId].isFinished = true;
     }
     
-    // @ dev Claims tokens
+    // @dev Claims tokens
     function claimTokens(uint256 crowdsaleId) public {
-        // Convertes to ERC20 Interface
+        // Converts to ERC20 Interface
         ERC20 token = ERC20(crowdsaleStorage.getTokenAddressById(crowdsaleId));
         uint256 amount = campaigns[crowdsaleId].weiRaised / token.balanceOf(this) * campaigns[crowdsaleId].invested[msg.sender];
         token.transfer(msg.sender, amount);
