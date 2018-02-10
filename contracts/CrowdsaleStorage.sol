@@ -98,7 +98,7 @@ contract CrowdsaleStorage is Management {
     }
     
     function setCrowdsaleActive(uint256 _crowdsaleId) onlyCEO public {
-        require(activeCrowdsaleId = 0);
+        require(activeCrowdsaleId == 0);
         require(crowdsales[_crowdsaleId].status == CrowdsaleStatus.Waiting);
         crowdsales[_crowdsaleId].status = CrowdsaleStatus.Active;
         activeCrowdsaleId = _crowdsaleId;
