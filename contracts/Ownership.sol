@@ -90,6 +90,7 @@ contract Ownership {
     // @param CFOAddress Address of existing CFO
     function removeCFO(address CFOAddress) onlyCEO public {
         require(CFO == CFOAddress);
+        require(CFOAddress != 0x0);
         adminCount--;
         delete isAdmin[CFOAddress];
         CFO = 0x0;
@@ -97,9 +98,10 @@ contract Ownership {
 
     // @dev Removes admin
     // @param adminAddress Addres of existing admin
-    function removeAdmin(address adminAddress) onlyAdmins public {
+    function removeAdmin(address adminAddress) onlyCEO public {
         require(isAdmin[adminAddress]);
         require(adminAddress != CEO && adminAddress != CFO);
+        require(adminAddress != 0x0);
         delete isAdmin[adminAddress];
         adminCount--;
     }
