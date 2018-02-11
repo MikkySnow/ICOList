@@ -1,8 +1,8 @@
 
 pragma solidity ^0.4.18;
 
-contract token {
-    function transfer(address receiver, uint amount);
+interface token {
+    function transfer(address receiver, uint amount) public;
 }
 
 contract Crowdsale {
@@ -13,8 +13,8 @@ contract Crowdsale {
     uint public price;
     token public tokenReward;
     mapping(address => uint256) public balanceOf;
-    bool fundingGoalReached = false;
-    bool crowdsaleClosed = false;
+    bool public fundingGoalReached = false;
+    bool public crowdsaleClosed = false;
 
     event GoalReached(address recipient, uint totalAmountRaised);
     event FundTransfer(address backer, uint amount, bool isContribution);
@@ -24,17 +24,17 @@ contract Crowdsale {
      *
      * Setup the owner
      */
-    function Crowdsale(
+    function Crowdsale ( // "0x1", 10, 60, 10000, "0x2"
         address ifSuccessfulSendTo,
         uint fundingGoalInEthers,
         uint durationInMinutes,
-        uint etherCostOfEachToken,
+        uint weiCostOfEachToken,
         address addressOfTokenUsedAsReward
-    ) {
+    ) public {
         beneficiary = ifSuccessfulSendTo;
         fundingGoal = fundingGoalInEthers * 1 ether;
         deadline = now + durationInMinutes * 1 minutes;
-        price = etherCostOfEachToken * 1 ether;
+        price = weiCostOfEachToken * 1 wei;
         tokenReward = token(addressOfTokenUsedAsReward);
     }
 
@@ -43,7 +43,7 @@ contract Crowdsale {
      *
      * The function without name is the default function that is called whenever anyone sends funds to a contract
      */
-    function () payable {
+    function () payable public{
         require(!crowdsaleClosed);
         uint amount = msg.value;
         balanceOf[msg.sender] += amount;
@@ -59,14 +59,13 @@ contract Crowdsale {
      *
      * Checks if the goal or time limit has been reached and ends the campaign
      */
-    function checkGoalReached() afterDeadline {
+    function checkGoalReached() public afterDeadline {
         if (amountRaised >= fundingGoal){
             fundingGoalReached = true;
             GoalReached(beneficiary, amountRaised);
         }
         crowdsaleClosed = true;
     }
-
 
     /**
      * Withdraw the funds
@@ -75,7 +74,7 @@ contract Crowdsale {
      * sends the entire amount to the beneficiary. If goal was not reached, each contributor can withdraw
      * the amount they contributed.
      */
-    function safeWithdrawal() afterDeadline {
+    function safeWithdrawal() public afterDeadline {
         if (!fundingGoalReached) {
             uint amount = balanceOf[msg.sender];
             balanceOf[msg.sender] = 0;
