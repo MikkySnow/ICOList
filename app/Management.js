@@ -3,17 +3,17 @@ import { default as Web3} from 'web3';
 import { default as contract } from 'truffle-contract';
 
 // Import our contract artifacts and turn them to usable abstraction
-import CrowdsaleStorageArtifacts from '../build/contracts/CrowdsaleStorage.json';
+import ManagementArtifacts from '../build/contracts/Management.json';
 
 // Creates usable abstractions
-const CrowdsaleStorage = contract(CrowdsaleStorageArtifacts);
+const Management = contract(ManagementArtifacts);
 
 let account;    // Stores user account between calls
 
 window.App = {
     // Initializing function
     start: function () {
-        CrowdsaleStorage.setProvider(web3.currentProvider);
+        Management.setProvider(web3.currentProvider);
 
         // Get the initial account balance so it can be displayed.
         web3.eth.getAccounts(function(err, accs) {
@@ -29,33 +29,25 @@ window.App = {
             account = accs[0]
         })
     },
-     addCrowdsale: function (_crowdsaleAddress, _tokenAddress) {
-        CrowdsaleStorage.deployed().then(function (instance) {
-            instance.addCrowdsale(_crowdsaleAddress, _tokenAddress,{from: account})
+     pause: function () {
+        Management.deployed().then(function (instance) {
+            instance.pause({from: account})
         }).catch(function (e) {
             console.log(e)
         })
     },
 
-    setCrowdsaleToken: function (_crowdsaleId, _tokenAddress) {
-        CrowdsaleStorage.deployed().then(function (instance) {
-            instance.setCrowdsaleToken(_crowdsaleId, _tokenAddress, {from: account})
+    unpause: function () {
+        Management.deployed().then(function (instance) {
+            instance.unpause({from: account})
         }).catch(function (e) {
             console.log(e)
         })
     },
 
-    setCrowdsaleEnded: function (_crowdsaleId) {
-        CrowdsaleStorage.deployed().then(function (instance) {
-            instance.setCrowdsaleEnded(_crowdsaleId, {from: account})
-        }).catch(function (e) {
-            console.log(e)
-        })
-    },
-
-    setCrowdsaleActive: function (_crowdsaleId) {
-        CrowdsaleStorage.deployed().then(function (instance) {
-            instance.setCrowdsaleActive(_crowdsaleId, {from: account})
+    transferOwnership: function (_address) {
+        Management.deployed().then(function (instance) {
+            instance.transferOwnership(_address, {from: account})
         }).catch(function (e) {
             console.log(e)
         })
