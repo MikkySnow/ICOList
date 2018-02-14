@@ -68,6 +68,24 @@ window.App = {
         }).catch(function (e) {
             console.log(e)
         })
+    },
+
+    claimTokens: function (crowdsaleID) {
+    	BusinessLogic.deployed().then(function (instance) {
+    		instance.claimTokens(crowdsaleID)
+    	}).catch(function (e) {
+    		console.log(e)
+    	})
+    },
+
+    buyTokens: function () {
+    	BusinessLogic.deployed.then(i=>i.buyTokens({from: account}))
+    		.catch(e=>{console.log(e)})
+    },
+
+    contribute: function (amount) {
+    	BusinessLogic.deployed().then(i=>i.contribute({from: account, value: amount}))
+    	.catch(e=>{console.log(e)})
     }
 };
 
